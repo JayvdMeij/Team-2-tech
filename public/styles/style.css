@@ -9,10 +9,6 @@ body{
     display: none;
 }
 
-.show{
+#extraInfo.show{
     display: block;
-}
-
-.hide{
-    display: none;
 }
