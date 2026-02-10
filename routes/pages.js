@@ -13,4 +13,8 @@ router.get('/contact', (req, res) => {
   res.render('contact')
 })
 
+router.get('/registratie', (req, res) => {
+  res.render('registratie')
+})
+
 module.exports = router
