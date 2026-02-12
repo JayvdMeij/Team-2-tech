@@ -2,18 +2,8 @@
 
 <h1>contact</h1>
 
-<div class="container">
-            <h2>Login</h2>
-            <form id="loginForm" method="post">
-                <label for="username">Username:</label>
-                <input type="text" id="username" required>
+<%- include('../partials/contact-form') %>
 
-                <label for="password">Password:</label>
-                <input type="password" id="password" required>
-
-                <input type="submit" value="Login">
-            </form>
-
-        <script src="/js/contact.js"></script>
+<script src="/js/contact.js"></script>
 
 <%- include('../partials/footer') %>
