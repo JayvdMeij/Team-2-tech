@@ -2,4 +2,4 @@
 Project tech team 2 repo
 <br>
 Ga naar project folder:<br>
-npm install
+Run command: npm install
