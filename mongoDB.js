@@ -1,8 +1,11 @@
+//In dit bestand alle functies zetten die nodig zijn om verbinging te maken met MongoDB.
+//Hierin ook de functie die nodig is om een query te maken en opvragen naar MongoDB, zoals registreren en inloggen.
+
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 async function runGetStarted() {
-  // Replace the uri string with your connection string
+  // uri uit .env
   const uri = process.env.MONGO_URI;
   const client = new MongoClient(uri);
 
