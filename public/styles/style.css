@@ -1,6 +1,6 @@
 body{
     padding: 1rem;
-    ;
+    background-color: #fff8f8;
 }
 
 #extraInfo{
@@ -24,6 +24,34 @@ body{
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+    }
+}
+
+.search-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 40%;
+    margin-top: 6rem;
+
+    form{
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+
+        input[type=text]{
+            padding: 0.5rem;
+            font-size: 1rem;
+            border-radius: 16px;
+            border: solid 1px #ccc;
+        }
+
+        button{
+            padding: 0.5rem;
+            font-size: 1rem;
+            border-radius: 16px;
+            border: solid 1px #ccc;
+        }
     }
 }
 

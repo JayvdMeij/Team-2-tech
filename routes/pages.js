@@ -12,6 +12,10 @@ router.get('/about', (req, res) => {
   res.render('pages/about')
 })
 
+router.get('/zoekbalk', (req, res) => {
+  res.render('pages/zoekbalk')
+})
+
 router.get('/contact', (req, res) => {
   res.render('pages/contact')
 })
