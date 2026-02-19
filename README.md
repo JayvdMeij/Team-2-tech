@@ -6,3 +6,5 @@ Clone deze repo
 Ga naar project folder:
 <br>
 Run command: npm install
+<br>
+Maak een .env bestand aan en zet daarin je MongoDB login
