@@ -4,21 +4,18 @@
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
-async function runGetStarted() {
-  // uri uit .env
-  const uri = process.env.MONGO_URI;
-  const client = new MongoClient(uri);
+const uri = process.env.MONGO_URI;
+const client = new MongoClient(uri);
 
-  try {
-    const database = client.db('sample_mflix');
-    const movies = database.collection('movies');
+let db;
 
-    // Queries for a movie that has a title value of 'Back to the Future'
-    const query = { title: 'Back to the Future' };
-    const movie = await movies.findOne(query);
-    console.log(movie);
-  } finally {
-    await client.close();
+async function connectDB() {
+  if (!db) {
+    await client.connect();
+    db = client.db('Locations');
+    console.log("MongoDB verbonden");
   }
+  return db;
 }
-runGetStarted().catch(console.dir);
+
+module.exports = connectDB;
