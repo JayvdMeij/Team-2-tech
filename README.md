@@ -34,3 +34,4 @@ De **Matching Website** helpt de gebruiker om andere gamers te vinden met vergel
 2. Ga naar project folder:
 3. Run command: npm install
 4. Maak een .env bestand aan en zet daarin je MongoDB login
+5. Zet in het .env bestand de API key
