@@ -5,16 +5,23 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 const uri = process.env.MONGO_URI;
-const client = new MongoClient(uri);
+const dbName = process.env.DB_NAME || 'GameMatch';
 
+if (!uri) {
+  throw new Error('MONGO_URI ontbreekt in je .env bestand.');
+}
+
+const client = new MongoClient(uri);
 let db;
 
 async function connectDB() {
   if (!db) {
     await client.connect();
-    db = client.db('Locations');
-    console.log("MongoDB verbonden");
+    db = client.db(dbName);
+    await db.collection('users').createIndex({ email: 1 }, { unique: true });
+    console.log(`MongoDB verbonden met database: ${dbName}`);
   }
+
   return db;
 }
 

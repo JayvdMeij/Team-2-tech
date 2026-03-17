@@ -1,20 +1,51 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="../styles/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title : 'GameMatch' %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/style.css">
+  <!-- <link rel="stylesheet" href="/css/auth.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-
 <body>
-    <div class="layout">
-        <%- include('../partials/sidebar') %>
-            <header>
-                <nav>
-                    <a href="/">Home</a>
-                    <a href="/about">About</a>
-                    <a href="/contact">Contact</a>
-                    <a href="/registratie">Registratie</a>
-                    <a href="/zoekbalk">Zoekbalk</a>
-                </nav>
-            </header>
+  <div class="layout shell-layout">
+    <aside class="sidebar">
+      <div class="top-icon">
+        <a href="/"><i class="fa-solid fa-gamepad"></i></a>
+      </div>
+
+      <div class="bottom-icons">
+        <a href="/"><i class="fa-solid fa-house"></i></a>
+        <a href="/about"><i class="fa-solid fa-circle-info"></i></a>
+        <a href="/contact"><i class="fa-solid fa-envelope"></i></a>
+        <a href="/zoekbalk"><i class="fa-solid fa-magnifying-glass"></i></a>
+      </div>
+    </aside>
+
+    <header class="site-header app-header">
+      <div class="container nav">
+        <nav class="nav-links nav-links-left">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/zoekbalk">Zoekbalk</a>
+        </nav>
+
+        <nav class="nav-links">
+          <% if (currentUser) { %>
+            <a href="/dashboard" class="nav-btn">Dashboard</a>
+            <form action="/logout" method="POST">
+              <button type="submit" class="nav-btn nav-btn-button">Log out</button>
+            </form>
+          <% } else { %>
+            <a href="/login" class="nav-btn">LOG-IN</a>
+            <a href="/register" class="nav-btn">SIGN-UP</a>
+          <% } %>
+        </nav>
+      </div>
+    </header>
+    <main class="page-main">
