@@ -10,16 +10,43 @@
       <div class="profile-avatar placeholder-avatar">No Avatar</div>
     <% } %>
 
-    <p><strong>Email:</strong> <%= user.email %></p>
+<div class="profile-status">
+<p><%= user.status || 'Offline' %></p>
+</div>
 
-    <% if (user.favoriteGames && user.favoriteGames.length > 0) { %>
+    <div class="bio">
+<label>bio</label>
+<p><%= user.bio || 'Geen bio beschikbaar.' %></p>
+</div>
+
+    <div class="tags">
+<label>Tags</label>
+<ul>
+  <% if (user.tags && user.tags.length > 0) { %>
+    <% user.tags.forEach(tag => { %>
+      <li><%= tag %></li>
+    <% }) %>
+    <% } else { %>
+      <li>No tags</li>
+  <% } %>
+</ul>
+</div>
+
+<div class="edit">
+    <a href="/dashboard/edit">Edit Profile</a>
+</div>
+
       <div class="dashboard-games">
-        <h3>Favorite Games</h3>
-        <div class="dashboard-game-list">
-          <% user.favoriteGames.forEach((game) => { %>
-            <span class="dashboard-game-pill"><%= game.name %></span>
-          <% }) %>
-        </div>
+        <div class="favorite-games">
+    <label>Favoriete games</label>
+    <ul>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 0 ? user.favoriteGames[0] : 'No favorite game.' %></li>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 1 ? user.favoriteGames[1] : 'No favorite game.' %></li>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 2 ? user.favoriteGames[2] : 'No favorite game.' %></li>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 3 ? user.favoriteGames[3] : 'No favorite game.' %></li>
+    
+    </ul>
+    
       </div>
     <% } %>
 
