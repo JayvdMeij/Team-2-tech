@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const connectDB = require('../mongoDB');
+const { ObjectId } = require('mongodb');
 
 const router = express.Router();
 const uploadsPath = path.join(__dirname, '..', 'uploads');
@@ -167,7 +168,21 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/dashboard', requireLogin, (req, res) => {
+router.get('/dashboard', requireLogin, async (req, res) => {
+ 
+  const db = await connectDB();
+    const usersCollection = db.collection('users');
+
+  const user = await usersCollection.findOne({
+    _id: new ObjectId(req.session.user)
+  });
+  
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+
+ 
+  
   res.render('partials/dashboard', { user: req.session.user });
 });
 

@@ -290,6 +290,8 @@ img {
 }
 
 .dashboard-card {
+    display: grid;
+  grid-template-columns: auto auto auto;
   max-width: 700px;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
@@ -298,13 +300,38 @@ img {
   text-align: center;
 }
 
+.dashboard-avatar {
+  grid-row: 1 / 3;
+}
+
+.dashboard-status {
+  grid-row: 3 / 4;
+}
+
+.dashboard-tags {
+  grid-row: 4 / 5;
+  text-align: left;
+}
+
+.dashboard-bio {
+  grid-row: 5 / 6;
+  text-align: left;
+}
 .dashboard-card h1 {
   margin-bottom: 20px;
 }
 
 .dashboard-text {
+  grid-row: 7 / 8;
+  grid-column: 2/ 3;
   margin-top: 12px;
   color: rgba(255,255,255,0.78);
+}
+
+.dashboard-card .hero-actions {
+  grid-row: 8 / 9;
+  grid-column: 2 / 3;
+  justify-content: center;
 }
 
 .dashboard-logout-btn {
@@ -430,6 +457,8 @@ img {
 }
 
 .dashboard-games {
+  grid-row: 3 / 4;
+  grid-column: 4 / 6;
   margin-top: 24px;
 }
 
@@ -438,8 +467,8 @@ img {
 }
 
 .dashboard-game-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 10px;
   justify-content: center;
 }

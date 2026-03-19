@@ -1,25 +1,27 @@
 <%- include('../partials/header', { title: 'Dashboard - GameMatch' }) %>
 
 <section class="dashboard-page">
+  <h1>Welcome, <%= user.username %> 🎮</h1>
   <div class="container dashboard-card">
-    <h1>Welcome, <%= user.username %> 🎮</h1>
-
+    
+    <div class="dashboard-avatar">
     <% if (user.avatar) { %>
       <img src="/uploads/<%= user.avatar %>" alt="Avatar" class="profile-avatar" />
     <% } else { %>
       <div class="profile-avatar placeholder-avatar">No Avatar</div>
     <% } %>
-
-<div class="profile-status">
-<p><%= user.status || 'Offline' %></p>
+</div>
+<div class="dashboard-status">
+  <h2><%= user.username %></h2>
+  <p><%= user.status || 'Offline' %></p>
 </div>
 
-    <div class="bio">
+    <div class="dashboard-bio">
 <label>bio</label>
-<p><%= user.bio || 'Geen bio beschikbaar.' %></p>
+<p><%= user.bio || 'No Bio' %></p>
 </div>
 
-    <div class="tags">
+    <div class="dashboard-tags">
 <label>Tags</label>
 <ul>
   <% if (user.tags && user.tags.length > 0) { %>
@@ -32,13 +34,10 @@
 </ul>
 </div>
 
-<div class="edit">
-    <a href="/dashboard/edit">Edit Profile</a>
-</div>
+
 
       <div class="dashboard-games">
-        <div class="favorite-games">
-    <label>Favoriete games</label>
+    <label>Favorite Games</label>
     <ul>
     <li><%= user.favoriteGames && user.favoriteGames.length > 0 ? user.favoriteGames[0] : 'No favorite game.' %></li>
     <li><%= user.favoriteGames && user.favoriteGames.length > 1 ? user.favoriteGames[1] : 'No favorite game.' %></li>
@@ -48,13 +47,14 @@
     </ul>
     
       </div>
-    <% } %>
+    
 
     <p class="dashboard-text">
       This page is ready for the next team step, like profiles, matches or chat.
     </p>
 
     <div class="hero-actions">
+      <a href="/dashboard/edit?id=<%= user._id %>" class="primary-btn">Edit Profile</a>
       <a href="/" class="primary-btn">Back Home</a>
       <form action="/logout" method="POST">
         <button type="submit" class="secondary-btn dashboard-logout-btn">Log Out</button>
