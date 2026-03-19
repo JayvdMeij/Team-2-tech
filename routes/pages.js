@@ -30,7 +30,7 @@ function requireLogin(req, res, next) {
 }
 
 router.get('/', (req, res) => {
-  res.render('pages/home');
+  res.render('pages/index');
 });
 
 router.get('/about', (req, res) => {

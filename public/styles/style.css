@@ -721,10 +721,6 @@ button {
   margin-left: 60px;
 }
 
-.page-main {
-  min-height: calc(100vh - 120px);
-}
-
 .app-header {
   position: sticky;
   top: 0;
