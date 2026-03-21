@@ -1,33 +1,60 @@
 <%- include('../partials/header', { title: 'Dashboard - GameMatch' }) %>
 
 <section class="dashboard-page">
+  <h1>Welcome, <%= user.username %> 🎮</h1>
   <div class="container dashboard-card">
-    <h1>Welcome, <%= user.username %> 🎮</h1>
-
+    
+    <div class="dashboard-avatar">
     <% if (user.avatar) { %>
       <img src="/uploads/<%= user.avatar %>" alt="Avatar" class="profile-avatar" />
     <% } else { %>
       <div class="profile-avatar placeholder-avatar">No Avatar</div>
     <% } %>
+</div>
+<div class="dashboard-status">
+  <h2><%= user.username %></h2>
+  <p><%= user.status || 'Offline' %></p>
+</div>
 
-    <p><strong>Email:</strong> <%= user.email %></p>
+    <div class="dashboard-bio">
+<label>bio</label>
+<p><%= user.bio || 'No Bio' %></p>
+</div>
 
-    <% if (user.favoriteGames && user.favoriteGames.length > 0) { %>
+    <div class="dashboard-tags">
+<label>Tags</label>
+<ul>
+  <% if (user.tags && user.tags.length > 0) { %>
+    <% user.tags.forEach(tag => { %>
+      <li><%= tag %></li>
+    <% }) %>
+    <% } else { %>
+      <li>No tags</li>
+  <% } %>
+</ul>
+</div>
+
+
+
       <div class="dashboard-games">
-        <h3>Favorite Games</h3>
-        <div class="dashboard-game-list">
-          <% user.favoriteGames.forEach((game) => { %>
-            <span class="dashboard-game-pill"><%= game.name %></span>
-          <% }) %>
-        </div>
+    <label>Favorite Games</label>
+    <ul>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 0 ? user.favoriteGames[0] : 'No favorite game.' %></li>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 1 ? user.favoriteGames[1] : 'No favorite game.' %></li>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 2 ? user.favoriteGames[2] : 'No favorite game.' %></li>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 3 ? user.favoriteGames[3] : 'No favorite game.' %></li>
+    
+    </ul>
+    
       </div>
-    <% } %>
+    
 
     <p class="dashboard-text">
       This page is ready for the next team step, like profiles, matches or chat.
     </p>
 
     <div class="hero-actions">
+      <a href="/dashboard/edit?id=<%= user._id %>" class="primary-btn">Edit Profile</a>
       <a href="/" class="primary-btn">Back Home</a>
       <form action="/logout" method="POST">
         <button type="submit" class="secondary-btn dashboard-logout-btn">Log Out</button>
