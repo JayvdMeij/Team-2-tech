@@ -1,20 +1,57 @@
-<article class="playerCard">
+<li class="playerCardContent">
 
-    <div class="playerContent">
-        <div class="playerInfo">
-            <img src="/images/player-placeholder.png" alt="Speler Foto">
-            <h3>Naam</h3>
-            <p>Leeftijd</p>
-            <p>Positie</p>
-        </div>
-        <div class="playerGames">
-            <img src="/images/team-placeholder.png" alt="Team Logo">
-            <img src="/images/league-placeholder.png" alt="League Logo">
-        </div>
+    <button type="button">Add Friend</button>
+
+    <!-- thumbnail -->
+
+    <div class="thumbnail">
+        <% if (player.thumbnail) { %>
+            <img src="<%= player.thumbnail %>" alt="">
+        <% } %>
     </div>
 
-    <div class="playerButtons">
-        <a href="#">Bekijk Profiel</a>
-        <a href="#">vriendschapsverzoek</a>
+    <!-- games -->
+    <img
+        src="<%= player.avatar ? player.avatar : '/images/player-placeholder.png' %>"
+        alt="Profielfoto van <%= player.name %>"
+    >
+
+    <div>
+        <!-- user information -->
+
+        <h3 class="name"><%= player.name %></h3>
+
+        <% if (player.bio) { %>
+            <p class="bio"><%= player.bio %></p>
+        <% } %>
+
     </div>
-</article>
+
+        <!-- games -->
+
+    <div>
+        <% if (player.platform) { %>
+            <p class="platform"><%= player.platform %></p>
+        <% } %>
+
+        <% if (player.playstyle) { %>
+            <p class="playstyle"><%= player.playstyle %></p>
+        <% } %>
+
+        <% if (player.language) { %>
+            <p class="language"><%= player.language %></p>
+        <% } %>
+    </div>
+
+    <div>       
+        <% if (player.games && player.games.length) { %>
+        <ul class="games">
+            <% player.games.forEach(game => { %>
+                <li><%= game %></li>
+            <% }) %>
+        </ul>
+        <% } else { %>
+            <p class="games">Geen games toegevoegd</p>
+        <% } %>
+    </div>
+</li>
