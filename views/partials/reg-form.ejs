@@ -1,23 +1,65 @@
 <form action="/register" method="POST" enctype="multipart/form-data" id="registerForm">
-    <input type="text" name="username" placeholder="Username" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <input type="password" name="password" placeholder="Password" required />
+    <div id="registerStep1" data-step="1">
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Password" required />
 
-    <label id="avatarLabel" for="avatar">Upload Avatar</label>
-    <input type="file" name="avatar" id="avatar" accept="image/*" />
+        <label id="avatarLabel" for="avatar">Upload Avatar</label>
+        <input type="file" name="avatar" id="avatar" accept="image/*" />
 
-    <div id="avatarPreviewWrap">
-        <img id="avatarPreview" alt="Avatar preview" />
-        <button type="button" id="removeAvatarBtn">Remove</button>
+        <div id="avatarPreviewWrap">
+            <img id="avatarPreview" alt="Avatar preview" />
+            <button type="button" id="removeAvatarBtn">Remove</button>
+        </div>
+
+        <div data-actions>
+            <button type="button" class="primary-btn" id="nextStepBtn">Next</button>
+        </div>
     </div>
 
-    <div id="gameSearchField">
-        <input type="text" id="gameSearch" placeholder="Search for games..." autocomplete="off" />
-        <div id="searchResults"></div>
+    <div id="registerStep2" data-step="2">
+        <!-- <p id="registerOptionalText">These details are optional, so you can skip this step for now.</p> -->
+
+        <label for="platform">Platform</label>
+        <select name="platform" id="platform">
+            <option value="">Choose a platform</option>
+            <option value="pc">PC</option>
+            <option value="switch">Switch</option>
+            <option value="mobile">Mobile</option>
+        </select>
+
+        <label for="language">Language</label>
+        <select name="language" id="language">
+            <option value="">Choose a language</option>
+            <option value="english">English</option>
+            <option value="spanish">Spanish</option>
+            <option value="french">French</option>
+            <option value="german">German</option>
+            <option value="chinese">Chinese</option>
+            <option value="japanese">Japanese</option>
+            <option value="korean">Korean</option>
+        </select>
+
+        <label for="playstyle">Playstyle</label>
+        <select name="playstyle" id="playstyle">
+            <option value="">Choose a playstyle</option>
+            <option value="casual">Casual</option>
+            <option value="competitive">Competitive</option>
+        </select>
+
+        <label for="gameSearch">Favorite games</label>
+        <div id="gameSearchField">
+            <input type="text" id="gameSearch" placeholder="Search for games..." autocomplete="off" />
+            <div id="searchResults"></div>
+        </div>
+
+        <div id="selectedGames"></div>
+        <input type="hidden" name="favoriteGames" id="favoriteGamesInput" />
+
+        <div data-actions>
+            <button type="button" id="backStepBtn">Back</button>
+            <button type="submit" id="skipStepBtn">Skip for now</button>
+            <button type="submit" class="primary-btn">Create Account</button>
+        </div>
     </div>
-
-    <div id="selectedGames"></div>
-    <input type="hidden" name="favoriteGames" id="favoriteGamesInput" />
-
-    <button type="submit" class="primary-btn">Create Account</button>
 </form>

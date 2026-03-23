@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const registerForm = document.getElementById('registerForm');
+  const registerCard = document.getElementById('registerCard');
+  const registerStep1 = document.getElementById('registerStep1');
+  const registerStep2 = document.getElementById('registerStep2');
+  const nextStepBtn = document.getElementById('nextStepBtn');
+  const backStepBtn = document.getElementById('backStepBtn');
   const avatarInput = document.getElementById('avatar');
   const avatarLabel = document.getElementById('avatarLabel');
   const avatarPreviewWrap = document.getElementById('avatarPreviewWrap');
@@ -9,16 +15,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectedGames = document.getElementById('selectedGames');
   const favoriteGamesInput = document.getElementById('favoriteGamesInput');
 
-  if (!avatarInput || !gameSearch) {
+  if (!registerForm || !registerCard || !registerStep1 || !registerStep2 || !avatarInput || !gameSearch) {
     return;
   }
 
   let selected = [];
   let debounceTimer;
 
+  registerStep2.style.display = 'none';
   avatarPreviewWrap.style.display = 'none';
   searchResults.style.display = 'none';
   selectedGames.style.display = 'none';
+
+  function showStep(stepNumber) {
+    registerStep1.style.display = stepNumber === 1 ? 'flex' : 'none';
+    registerStep2.style.display = stepNumber === 2 ? 'flex' : 'none';
+    registerCard.classList.toggle('is-step-2', stepNumber === 2);
+    registerCard.scrollTop = 0;
+  }
+
+  function validateStepOne() {
+    const fields = registerStep1.querySelectorAll('input[required]');
+    return Array.from(fields).every((field) => field.reportValidity());
+  }
 
   function updateHiddenInput() {
     favoriteGamesInput.value = JSON.stringify(selected);
@@ -124,6 +143,20 @@ document.addEventListener('DOMContentLoaded', () => {
     avatarPreviewWrap.style.display = 'none';
     avatarInput.style.display = 'block';
     avatarLabel.style.display = 'block';
+  });
+
+  showStep(1);
+
+  nextStepBtn.addEventListener('click', () => {
+    if (!validateStepOne()) {
+      return;
+    }
+
+    showStep(2);
+  });
+
+  backStepBtn.addEventListener('click', () => {
+    showStep(1);
   });
 
   gameSearch.addEventListener('input', () => {

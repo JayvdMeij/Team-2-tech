@@ -60,7 +60,7 @@ router.post('/contact', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.render('partials/login', { error: null });
+  res.render('pages/login', { error: null });
 });
 
 router.get('/register', (req, res) => {
@@ -76,7 +76,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
     const db = await connectDB();
     const usersCollection = db.collection('users');
 
-    const { username, email, password, favoriteGames } = req.body;
+    const { username, email, password, favoriteGames, platform, language, playstyle } = req.body;
 
     if (!username || !email || !password) {
       return res.status(400).render('pages/register', {
@@ -109,6 +109,9 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
       email: normalizedEmail,
       password: hashedPassword,
       avatar: req.file ? req.file.filename : null,
+      platform: platform ? platform.trim().toLowerCase() : null,
+      language: language ? language.trim() : null,
+      playstyle: playstyle ? playstyle.trim().toLowerCase() : null,
       favoriteGames: parsedFavoriteGames,
       createdAt: new Date()
     };
@@ -140,7 +143,7 @@ router.post('/login', async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).render('partials/login', {
+      return res.status(400).render('pages/login', {
         error: 'Ongeldig e-mailadres of wachtwoord.'
       });
     }
@@ -148,7 +151,7 @@ router.post('/login', async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(400).render('partials/login', {
+      return res.status(400).render('pages/login', {
         error: 'Ongeldig e-mailadres of wachtwoord.'
       });
     }
@@ -158,13 +161,16 @@ router.post('/login', async (req, res) => {
       username: user.username,
       email: user.email,
       avatar: user.avatar,
+      platform: user.platform || null,
+      language: user.language || null,
+      playstyle: user.playstyle || null,
       favoriteGames: user.favoriteGames || []
     };
 
     res.redirect('/dashboard');
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).render('partials/login', {
+    res.status(500).render('pages/login', {
       error: 'Er ging iets mis tijdens het inloggen.'
     });
   }

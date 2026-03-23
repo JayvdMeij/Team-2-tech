@@ -1,4 +1,4 @@
-<%- include('../partials/header', { title: 'Login - GameMatch' }) %>
+<%- include('../partials/header', { title: 'Login - GameMatch', bodyClass: 'auth-shell' }) %>
 
 <section class="auth-page">
   <div class="game-wall-overlay"></div>
@@ -21,11 +21,7 @@
         <div id="authError"><%= error %></div>
       <% } %>
 
-      <form action="/login" method="POST" id="loginForm">
-        <input type="email" name="email" placeholder="Email" required />
-        <input type="password" name="password" placeholder="Password" required />
-        <button type="submit" class="primary-btn">Log In</button>
-      </form>
+      <%- include('../partials/log-form') %>
 
       <p>
         Don't have an account?
