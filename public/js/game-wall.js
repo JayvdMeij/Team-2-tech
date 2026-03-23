@@ -17,7 +17,7 @@ async function loadGameWall() {
       const repeated = [...rowGames, ...rowGames];
 
       row.innerHTML = repeated.map((game) => `
-        <div class="game-tile">
+        <div>
           <img src="${game.image}" alt="${game.name}">
         </div>
       `).join('');
