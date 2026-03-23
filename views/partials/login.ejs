@@ -1,34 +1,34 @@
 <%- include('../partials/header', { title: 'Login - GameMatch' }) %>
 
-<section class="auth-page game-wall-bg">
+<section class="auth-page">
   <div class="game-wall-overlay"></div>
 
   <div class="game-wall">
-    <div class="wall-row row-left" id="row1"></div>
-    <div class="wall-row row-right" id="row2"></div>
-    <div class="wall-row row-left" id="row3"></div>
-    <div class="wall-row row-right" id="row4"></div>
-    <div class="wall-row row-left" id="row5"></div>
-    <div class="wall-row row-right" id="row6"></div>
+    <div id="row1"></div>
+    <div id="row2"></div>
+    <div id="row3"></div>
+    <div id="row4"></div>
+    <div id="row5"></div>
+    <div id="row6"></div>
   </div>
 
-  <div class="container auth-wrap">
+  <div class="container">
     <div class="auth-card">
       <h2>Log In</h2>
-      <p class="auth-subtext">Welcome back. Log in to continue.</p>
+      <p>Welcome back. Log in to continue.</p>
 
       <% if (error) { %>
-        <div class="error-box"><%= error %></div>
+        <div id="authError"><%= error %></div>
       <% } %>
 
-      <form action="/login" method="POST" class="auth-form">
+      <form action="/login" method="POST" id="loginForm">
         <input type="email" name="email" placeholder="Email" required />
         <input type="password" name="password" placeholder="Password" required />
-        <button type="submit" class="primary-btn full-btn">Log In</button>
+        <button type="submit" class="primary-btn">Log In</button>
       </form>
 
-      <p class="switch-text">
-        Don’t have an account?
+      <p>
+        Don't have an account?
         <a href="/register">Sign Up</a>
       </p>
     </div>

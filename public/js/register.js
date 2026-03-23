@@ -36,10 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     selected.forEach((game, index) => {
       const tag = document.createElement('div');
-      tag.className = 'game-tag';
       tag.innerHTML = `
         <span>${game.name}</span>
-        <button type="button" data-index="${index}">×</button>
+        <button type="button" data-index="${index}">x</button>
       `;
       selectedGames.appendChild(tag);
     });
@@ -71,11 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const alreadyAdded = selected.some((g) => g.id === game.id);
       const item = document.createElement('button');
       item.type = 'button';
-      item.className = 'search-item';
       item.disabled = alreadyAdded;
       item.innerHTML = `
-        <div class="search-item-content">
-          ${game.background_image ? `<img src="${game.background_image}" class="search-thumb" alt="${game.name}">` : ''}
+        <div>
+          ${game.background_image ? `<img src="${game.background_image}" alt="${game.name}">` : ''}
           <div><strong>${game.name}</strong></div>
         </div>
       `;

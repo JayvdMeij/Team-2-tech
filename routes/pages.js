@@ -64,7 +64,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-  res.render('partials/register', { error: null });
+  res.render('pages/register', { error: null });
 });
 
 router.get('/registratie', (req, res) => {
@@ -79,7 +79,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
     const { username, email, password, favoriteGames } = req.body;
 
     if (!username || !email || !password) {
-      return res.status(400).render('partials/register', {
+      return res.status(400).render('pages/register', {
         error: 'Username, email en password zijn verplicht.'
       });
     }
@@ -88,7 +88,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
     const existingUser = await usersCollection.findOne({ email: normalizedEmail });
 
     if (existingUser) {
-      return res.status(400).render('partials/register', {
+      return res.status(400).render('pages/register', {
         error: 'Er bestaat al een account met dit e-mailadres.'
       });
     }
@@ -117,7 +117,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
     res.redirect('/login');
   } catch (error) {
     console.error('Register error:', error);
-    res.status(500).render('partials/register', {
+    res.status(500).render('pages/register', {
       error: 'Er ging iets mis bij het aanmaken van je account.'
     });
   }
