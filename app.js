@@ -1,7 +1,7 @@
 require('dotenv').config();
 
-const http = require('http');                    // ADD
-const { Server } = require('socket.io');        // ADD
+const http = require('http');                    
+const { Server } = require('socket.io');        
 
 const express = require('express');
 const path = require('path');
@@ -9,8 +9,8 @@ const session = require('express-session');
 const connectDB = require('./mongoDB');
 
 const app = express();
-const server = http.createServer(app);          // ADD
-const io = new Server(server);                  // ADD
+const server = http.createServer(app);          
+const io = new Server(server);                  
 const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
@@ -44,7 +44,7 @@ io.on('connection', (socket) => {               // ADD
   });                                           // ADD
 });                                             // ADD
 
-app.use('/', require('./routes/pages'));
+app.use('/', require('./routes/index'));
 
 app.use((req, res) => {
   res.status(404).render('pages/404');

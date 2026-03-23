@@ -10,28 +10,6 @@ const { ObjectId } = require('mongodb');
 const dummyUsers = require('../data/users.json');
 
 const router = express.Router();
-const uploadsPath = path.join(__dirname, '..', 'uploads');
-
-if (!fs.existsSync(uploadsPath)) {
-  fs.mkdirSync(uploadsPath, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadsPath),
-  filename: (req, file, cb) => {
-    const safeName = file.originalname.replace(/\s+/g, '-');
-    cb(null, `${Date.now()}-${safeName}`);
-  }
-});
-
-const upload = multer({ storage });
-
-function requireLogin(req, res, next) {
-  if (!req.session.user) {
-    return res.redirect('/login');
-  }
-  next();
-}
 
 router.get('/', (req, res) => {
   res.render('pages/index');
@@ -60,6 +38,7 @@ router.post('/contact', (req, res) => {
   });
 });
 
+module.exports = router;
 router.get('/login', (req, res) => {
   res.render('pages/login', { error: null });
 });
