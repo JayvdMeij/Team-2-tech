@@ -1,9 +1,9 @@
-<%- include("../partials/header", { title: "Home - GameMatch" }) %>
+<%- include("../partials/header", { title: "Home - GameMatch", bodyClass: "home-shell" }) %>
 
 <section class="hero">
   <div class="hero-overlay"></div>
 
-  <div class="container hero-content">
+  <div class="container">
     <h1>Find Gamers That<br>Match Your Playstyle</h1>
 
     <p>
@@ -11,7 +11,7 @@
       at the same time as you. No random teammates. Just better matches.
     </p>
 
-    <div class="hero-actions">
+    <div>
       <% if (currentUser) { %>
         <a href="/dashboard" class="primary-btn">Go to dashboard</a>
       <% } else { %>

@@ -1,0 +1,36 @@
+<%- include('../partials/header', { title: 'Register - GameMatch', bodyClass: 'auth-shell' }) %>
+
+<section class="auth-page">
+  <div class="game-wall-overlay"></div>
+
+  <div class="game-wall">
+    <div id="row1"></div>
+    <div id="row2"></div>
+    <div id="row3"></div>
+    <div id="row4"></div>
+    <div id="row5"></div>
+    <div id="row6"></div>
+  </div>
+
+  <div class="container-register">
+    <div class="auth-card" id="registerCard">
+      <h2>Create Account</h2>
+      <p>Set up your profile and start matching.</p>
+
+      <% if (error) { %>
+        <div id="authError"><%= error %></div>
+      <% } %>
+
+      <%- include('../partials/reg-form') %>
+      
+      <p>
+        Already have an account?
+        <a href="/login">Log In</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<script src="/js/game-wall.js"></script>
+<script src="/js/register.js"></script>
+<%- include('../partials/footer') %>

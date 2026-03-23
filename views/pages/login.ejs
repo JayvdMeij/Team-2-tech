@@ -1,0 +1,36 @@
+<%- include('../partials/header', { title: 'Login - GameMatch', bodyClass: 'auth-shell' }) %>
+
+<section class="auth-page">
+  <div class="game-wall-overlay"></div>
+
+  <div class="game-wall">
+    <div id="row1"></div>
+    <div id="row2"></div>
+    <div id="row3"></div>
+    <div id="row4"></div>
+    <div id="row5"></div>
+    <div id="row6"></div>
+  </div>
+
+  <div class="container">
+    <div class="auth-card">
+      <h2>Log In</h2>
+      <p>Welcome back. Log in to continue.</p>
+
+      <% if (error) { %>
+        <div id="authError"><%= error %></div>
+      <% } %>
+
+      <%- include('../partials/log-form') %>
+
+      <p>
+        Don't have an account?
+        <a href="/register">Sign Up</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<script src="/js/game-wall.js"></script>
+<script src="/js/login.js"></script>
+<%- include('../partials/footer') %>

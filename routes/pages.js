@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const connectDB = require('../mongoDB');
 const { ObjectId } = require('mongodb');
 
@@ -60,11 +61,168 @@ router.post('/contact', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.render('partials/login', { error: null });
+  res.render('pages/login', { error: null });
 });
 
 router.get('/register', (req, res) => {
-  res.render('partials/register', { error: null });
+  res.render('pages/register', { error: null });
+});
+
+router.get('/forgot-password', (req, res) => {
+  res.render('pages/forgot-password', {
+    error: null,
+    success: null,
+    resetLink: null
+  });
+});
+
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const db = await connectDB();
+    const usersCollection = db.collection('users');
+    const email = (req.body.email || '').toLowerCase().trim();
+
+    if (!email) {
+      return res.status(400).render('pages/forgot-password', {
+        error: 'Email is verplicht.',
+        success: null,
+        resetLink: null
+      });
+    }
+
+    const user = await usersCollection.findOne({ email });
+
+    if (!user) {
+      return res.render('pages/forgot-password', {
+        error: null,
+        success: 'If this email exists, a reset link is ready.',
+        resetLink: null
+      });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenExpiresAt = new Date(Date.now() + 1000 * 60 * 30);
+
+    await usersCollection.updateOne(
+      { _id: user._id },
+      {
+        $set: {
+          resetToken,
+          resetTokenExpiresAt
+        }
+      }
+    );
+
+    res.render('pages/forgot-password', {
+      error: null,
+      success: 'Use the reset link below to choose a new password.',
+      resetLink: `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`
+    });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).render('pages/forgot-password', {
+      error: 'Er ging iets mis bij het aanvragen van een nieuw wachtwoord.',
+      success: null,
+      resetLink: null
+    });
+  }
+});
+
+router.get('/reset-password/:token', async (req, res) => {
+  try {
+    const db = await connectDB();
+    const usersCollection = db.collection('users');
+    const { token } = req.params;
+
+    const user = await usersCollection.findOne({
+      resetToken: token,
+      resetTokenExpiresAt: { $gt: new Date() }
+    });
+
+    if (!user) {
+      return res.status(400).render('pages/reset-password', {
+        error: 'Deze reset link is ongeldig of verlopen.',
+        success: null,
+        token,
+        validToken: false
+      });
+    }
+
+    res.render('pages/reset-password', {
+      error: null,
+      success: null,
+      token,
+      validToken: true
+    });
+  } catch (error) {
+    console.error('Reset password page error:', error);
+    res.status(500).render('pages/reset-password', {
+      error: 'Er ging iets mis bij het openen van de reset pagina.',
+      success: null,
+      token: req.params.token,
+      validToken: false
+    });
+  }
+});
+
+router.post('/reset-password/:token', async (req, res) => {
+  try {
+    const db = await connectDB();
+    const usersCollection = db.collection('users');
+    const { token } = req.params;
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).render('pages/reset-password', {
+        error: 'Password is verplicht.',
+        success: null,
+        token,
+        validToken: true
+      });
+    }
+
+    const user = await usersCollection.findOne({
+      resetToken: token,
+      resetTokenExpiresAt: { $gt: new Date() }
+    });
+
+    if (!user) {
+      return res.status(400).render('pages/reset-password', {
+        error: 'Deze reset link is ongeldig of verlopen.',
+        success: null,
+        token,
+        validToken: false
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await usersCollection.updateOne(
+      { _id: user._id },
+      {
+        $set: { password: hashedPassword },
+        $unset: {
+          resetToken: '',
+          resetTokenExpiresAt: ''
+        }
+      }
+    );
+
+    res.render('pages/reset-password', {
+      error: null,
+      success: 'Je wachtwoord is aangepast. Je kunt nu inloggen.',
+      token,
+      validToken: false
+    });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).render('pages/reset-password', {
+      error: 'Er ging iets mis bij het resetten van je wachtwoord.',
+      success: null,
+      token: req.params.token,
+      validToken: true
+    });
+  }
 });
 
 router.get('/registratie', (req, res) => {
@@ -76,10 +234,10 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
     const db = await connectDB();
     const usersCollection = db.collection('users');
 
-    const { username, email, password, favoriteGames } = req.body;
+    const { username, email, password, favoriteGames, platform, language, playstyle } = req.body;
 
     if (!username || !email || !password) {
-      return res.status(400).render('partials/register', {
+      return res.status(400).render('pages/register', {
         error: 'Username, email en password zijn verplicht.'
       });
     }
@@ -88,7 +246,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
     const existingUser = await usersCollection.findOne({ email: normalizedEmail });
 
     if (existingUser) {
-      return res.status(400).render('partials/register', {
+      return res.status(400).render('pages/register', {
         error: 'Er bestaat al een account met dit e-mailadres.'
       });
     }
@@ -109,6 +267,9 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
       email: normalizedEmail,
       password: hashedPassword,
       avatar: req.file ? req.file.filename : null,
+      platform: platform ? platform.trim().toLowerCase() : null,
+      language: language ? language.trim() : null,
+      playstyle: playstyle ? playstyle.trim().toLowerCase() : null,
       favoriteGames: parsedFavoriteGames,
       createdAt: new Date()
     };
@@ -117,7 +278,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
     res.redirect('/login');
   } catch (error) {
     console.error('Register error:', error);
-    res.status(500).render('partials/register', {
+    res.status(500).render('pages/register', {
       error: 'Er ging iets mis bij het aanmaken van je account.'
     });
   }
@@ -140,7 +301,7 @@ router.post('/login', async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).render('partials/login', {
+      return res.status(400).render('pages/login', {
         error: 'Ongeldig e-mailadres of wachtwoord.'
       });
     }
@@ -148,7 +309,7 @@ router.post('/login', async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(400).render('partials/login', {
+      return res.status(400).render('pages/login', {
         error: 'Ongeldig e-mailadres of wachtwoord.'
       });
     }
@@ -158,13 +319,16 @@ router.post('/login', async (req, res) => {
       username: user.username,
       email: user.email,
       avatar: user.avatar,
+      platform: user.platform || null,
+      language: user.language || null,
+      playstyle: user.playstyle || null,
       favoriteGames: user.favoriteGames || []
     };
 
     res.redirect('/dashboard');
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).render('partials/login', {
+    res.status(500).render('pages/login', {
       error: 'Er ging iets mis tijdens het inloggen.'
     });
   }
