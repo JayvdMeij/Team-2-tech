@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="/styles/style.css">
+
+<div class="matches" id="matches">
+    <div>
+        <input class="search" type="text" placeholder="Zoek gebruiker">
+
+        <select id="filter">
+            <option value="all">Filteren</option>
+            <option value="pc">PC</option>
+            <option value="console">Console</option>
+            <option value="casual">Casual</option>
+            <option value="competitive">Competitive</option>
+            <option value="english">English</option>
+            <option value="dutch">Dutch</option>
+        </select>
+
+        <button class="sort" data-sort="name">Sort (A-Z)</button>
+    </div>
+
+    <% if (matches && matches.length > 0) { %>
+        <ul class="list players">
+            <% matches.forEach(player => { %>
+                <%- include('../partials/playerCard', { player }) %>
+            <% }) %>
+        </ul>
+    <% } else { %> <p>Er zijn nog geen matches gevonden.</p> <% } %>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+<script src="/js/matches.js"></script>

@@ -6,6 +6,8 @@ const fs = require('fs');
 const connectDB = require('../mongoDB');
 const { ObjectId } = require('mongodb');
 
+const dummyUsers = require('../data/users.json');
+
 const router = express.Router();
 const uploadsPath = path.join(__dirname, '..', 'uploads');
 
@@ -174,7 +176,7 @@ router.get('/dashboard', requireLogin, async (req, res) => {
     const usersCollection = db.collection('users');
 
   const user = await usersCollection.findOne({
-    _id: new ObjectId(req.session.user)
+    _id: new ObjectId(req.session.user.id)
   });
   
   if (!user) {
@@ -241,6 +243,18 @@ router.get('/api/background-games', async (req, res) => {
     console.error('Background games error:', error);
     res.status(500).json({ error: 'Failed to fetch background games.' });
   }
+});
+
+// MATCHING ROUTE
+// Op dit moment laat ik nog alle dummy users in de route om de frontend te testen
+
+router.get('/matches', requireLogin, (req, res) => {
+  const matches = dummyUsers;
+
+  res.render('pages/matches', {
+    user: req.session.user,
+    matches
+  });
 });
 
 module.exports = router;
@@ -345,3 +359,38 @@ router.get('/users', requireLogin, async (req, res) => {
   ).join(''));
 });
 
+// MATCHING
+// De matching is alvast neergezet hieronder en werkt nu met dummy users uit data/users.json
+// Later koppel ik de route aan mongoDB gebruikersdata en voorkeuren uit MongoDB/session!
+
+// Matching laat alles waarbij de gebruiker minimaal 1 overeenkomst heeft zien!
+
+function isMatch(currentUser, candidateUser) {
+  const currentGames = currentUser.favoriteGames || [];
+  const candidateGames = candidateUser.games || [];
+
+  const hasSameGame = candidateGames.some(game =>
+    currentGames.includes(game)
+  );
+
+  const hasSamePlatform =
+    currentUser.platform &&
+    candidateUser.platform &&
+    currentUser.platform === candidateUser.platform;
+
+  const hasSamePlaystyle =
+    currentUser.playstyle &&
+    candidateUser.playstyle &&
+    currentUser.playstyle === candidateUser.playstyle;
+
+  const hasSameLanguage =
+    currentUser.language &&
+    candidateUser.language &&
+    currentUser.language === candidateUser.language;
+
+  return hasSameGame || hasSamePlatform || hasSamePlaystyle || hasSameLanguage;
+}
+
+function getMatches(currentUser, users) {
+  return users.filter(user => isMatch(currentUser, user));
+}

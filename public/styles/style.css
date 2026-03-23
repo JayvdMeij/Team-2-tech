@@ -1,21 +1,38 @@
-/* * {
-  box-sizing: border-box;
+*, *::after, *::before {
+    box-sizing:border-box;  
+
+    margin: 0;
+    padding: 0;
 }
 
-html, body {
-  margin: 0;
-  min-height: 100%;
+/****************************************************************/
+                        /* fonts */
+/****************************************************************/
+
+
+@font-face {
+  font-family: 'Nippo';
+  src: url('/public/fonts/nippo/Nippo-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
 }
 
-body {
-  background-color: #0e1015;
-  color: #ffffff;
-  font-family: Arial, Helvetica, sans-serif;
+@font-face {
+  font-family: 'Nippo';
+  src: url('/public/fonts/nippo/Nippo-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
 }
 
-a {
-  text-decoration: none;
-} */
+/****************************************************************/
+                        /* :root */
+/****************************************************************/
+
+:root {
+  --color-bg: #131313;
+  --color-bg-soft: #111111;
+  --color-text: #ffffff;
+}
 
 /* tess begin css */
 * {
@@ -947,4 +964,197 @@ footer {
 @keyframes slideOut {
   from { opacity: 1; transform: translateY(0); }
   to   { opacity: 0; transform: translateY(20px); }
+/****************************************************************/
+                        /* MATCHING */
+/****************************************************************/
+
+.matches {
+  background-color: var(--color-bg);
+  padding: 4rem 2rem;
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+
+    padding: 1rem 0;
+  }
+
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 4rem 2rem;
+  }
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row;
+    gap: 1rem;
+
+    width: 100%;
+  }
+
+  .search {
+    width: 80%;
+    height: 3rem;
+    padding: 1rem;
+
+    background-color: #343434;
+    border: none;
+    font-size: 1rem;
+
+    border-radius: .2rem;
+  }
+
+  .search:focus {
+    color: #fff;
+  }
+
+  button, select {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+
+    height: 3rem;
+    padding: 1rem;
+
+    cursor: pointer;
+
+    color: white;
+    background-color: #474747;
+    border: none;
+
+    border-radius: .2rem;
+
+    font-size: 1rem;
+    text-align: start;
+
+    transition: .2s ease-in-out;
+  }
+
+  button:hover, select:hover {
+    background-color: #4f4f4f;
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+}
+
+/* Player Card Content Match */
+
+.playerCardContent {
+  display: flex;
+  position: relative;
+  flex-flow: column;
+  gap: .5rem;
+
+  background-color: #262626;
+  border-radius: .2rem;
+
+  overflow: hidden;
+
+  button {
+    position: absolute;
+    z-index: 100;
+
+    right: 1rem;
+    bottom: 13rem;
+
+    background-color: #0040ff;
+
+    width: fit-content;
+  }
+
+  /* Profile picture */
+
+    img {
+      width: 20%;
+      height: auto;
+      border-radius: 4rem;
+
+      z-index: 2;
+
+      outline: 0.5rem solid #262626;
+    }
+
+    /* player information */
+
+    div:nth-of-type(2) {
+      display: flex;
+      justify-content: center;
+      flex-flow: column;
+
+      gap: .5rem;
+      margin-bottom: 1rem;
+    }
+
+    div:nth-of-type(3) {
+      display: flex;
+      justify-content: start;
+      flex-flow: row;
+
+      gap: 1rem;
+      margin-bottom: .5rem;
+    }
+    div:nth-of-type(3) > p {
+      width: fit-content;
+
+      background-color: #8EAAFF;
+      color: #001b6c;
+
+      padding: .5rem 1rem;
+      border-radius: .2rem;
+    } 
+
+    /* thumbnail image */
+
+    div:first-of-type {
+      width: 100%;
+      height: 15rem;
+      background: rgb(135, 135, 135);
+      overflow: hidden;
+
+      position: absolute;
+      z-index: 0;
+      
+      top: -100;
+      left: 0;
+    }
+
+    div:first-of-type img {
+      width: 110%;
+      border-radius: 0;
+      border: none;
+  }
+
+  /* games */
+
+  div:last-of-type ul {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row;
+
+    padding: 0;
+    gap: 1rem;
+  }
+
+  div:last-of-type li {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+
+    padding: .5rem 1rem;
+    border-radius: .2rem;
+
+    margin: 0;
+
+    font-weight: 500;
+    background-color: #b0b0b0;
+    color: #343434;
+  }
 }
