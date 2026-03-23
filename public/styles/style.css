@@ -289,6 +289,7 @@ img {
   background: linear-gradient(180deg, #000000, #131313);
 }
 
+/* Profile box */
 .dashboard-card {
     display: grid;
   grid-template-columns: auto auto auto;
@@ -314,6 +315,7 @@ img {
 }
 
 .dashboard-bio {
+  grid-column:  1/ 3;
   grid-row: 5 / 6;
   text-align: left;
 }
@@ -458,7 +460,7 @@ img {
 
 .dashboard-games {
   grid-row: 3 / 4;
-  grid-column: 4 / 6;
+  grid-column: 3 / 5;
   margin-top: 24px;
 }
 

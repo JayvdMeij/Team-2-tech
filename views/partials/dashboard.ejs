@@ -4,11 +4,19 @@
   <h1>Welcome, <%= user.username %> 🎮</h1>
   <div class="container dashboard-card">
     
+    <div class="dashboard-thumbnail">
+      <% if (user.thumbnail) { %>
+        <img src="/uploads/<%= user.thumbnail %>" alt="Thumbnail" class="profile-thumbnail" />
+      <% } else { %>
+        <img src="/images/default-thumbnail.jpg" alt="Default Thumbnail" class="profile-thumbnail placeholder-thumbnail" />
+      <% } %>
+    </div>
+    
     <div class="dashboard-avatar">
     <% if (user.avatar) { %>
       <img src="/uploads/<%= user.avatar %>" alt="Avatar" class="profile-avatar" />
     <% } else { %>
-      <div class="profile-avatar placeholder-avatar">No Avatar</div>
+     <img src="/images/default-avatar.png" alt="Default Avatar" class="profile-avatar placeholder-avatar" />
     <% } %>
 </div>
 <div class="dashboard-status">
@@ -39,10 +47,10 @@
       <div class="dashboard-games">
     <label>Favorite Games</label>
     <ul>
-    <li><%= user.favoriteGames && user.favoriteGames.length > 0 ? user.favoriteGames[0] : 'No favorite game.' %></li>
-    <li><%= user.favoriteGames && user.favoriteGames.length > 1 ? user.favoriteGames[1] : 'No favorite game.' %></li>
-    <li><%= user.favoriteGames && user.favoriteGames.length > 2 ? user.favoriteGames[2] : 'No favorite game.' %></li>
-    <li><%= user.favoriteGames && user.favoriteGames.length > 3 ? user.favoriteGames[3] : 'No favorite game.' %></li>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 0 ? user.favoriteGames[0].name : 'No favorite game.' %></li>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 1 ? user.favoriteGames[1].name : 'No favorite game.' %></li>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 2 ? user.favoriteGames[2].name : 'No favorite game.' %></li>
+    <li><%= user.favoriteGames && user.favoriteGames.length > 3 ? user.favoriteGames[3].name : 'No favorite game.' %></li>
     
     </ul>
     
