@@ -1,0 +1,69 @@
+<%- include('./header') %>
+
+<div class="profile-page">
+  <div class="profile-card">
+
+    <% if (profileUser.avatar) { %>
+      <img src="/uploads/<%= profileUser.avatar %>" alt="Avatar" class="profile-avatar" />
+    <% } else { %>
+      <div class="profile-avatar-placeholder">👤</div>
+    <% } %>
+
+    <h1><%= profileUser.username %></h1>
+
+    <% if (profileUser.favoriteGames && profileUser.favoriteGames.length > 0) { %>
+      <h3>Favoriete games</h3>
+      <ul class="favorite-games-list">
+        <% profileUser.favoriteGames.forEach(game => { %>
+          <li>
+            <% if (game.background_image) { %>
+              <img src="<%= game.background_image %>" alt="<%= game.name %>" />
+            <% } %>
+            <span><%= game.name %></span>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <% if (alreadyFriends) { %>
+      <button class="btn btn-disabled" disabled>✅ Vrienden</button>
+    <% } else if (alreadySent) { %>
+      <button class="btn btn-disabled" disabled>⏳ Verzoek verstuurd</button>
+    <% } else { %>
+      <button class="btn btn-primary" id="addFriendBtn"
+              data-userid="<%= profileUser._id %>">
+        ➕ Vriendschapsverzoek sturen
+      </button>
+    <% } %>
+
+  </div>
+</div>
+
+<script>
+  const addBtn = document.getElementById('addFriendBtn');
+  if (addBtn) {
+    addBtn.addEventListener('click', async () => {
+      const userId = addBtn.dataset.userid;
+      addBtn.disabled = true;
+      addBtn.textContent = 'Versturen...';
+
+      try {
+        const res = await fetch(`/api/friend-request/${userId}`, { method: 'POST' });
+        const data = await res.json();
+
+        if (data.success) {
+          addBtn.textContent = '⏳ Verzoek verstuurd';
+          addBtn.classList.replace('btn-primary', 'btn-disabled');
+        } else {
+          addBtn.textContent = data.error || 'Mislukt';
+          addBtn.disabled = false;
+        }
+      } catch {
+        addBtn.textContent = 'Fout, probeer opnieuw';
+        addBtn.disabled = false;
+      }
+    });
+  }
+</script>
+
+<%- include('./footer') %>
