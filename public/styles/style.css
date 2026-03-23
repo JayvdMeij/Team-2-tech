@@ -894,8 +894,6 @@ footer {
   text-align: center;
 }
 
-
-
 #fr-popup {
   position: fixed;
   bottom: 24px;
@@ -964,7 +962,9 @@ footer {
 @keyframes slideOut {
   from { opacity: 1; transform: translateY(0); }
   to   { opacity: 0; transform: translateY(20px); }
-/****************************************************************/
+}
+
+  /****************************************************************/
                         /* MATCHING */
 /****************************************************************/
 
