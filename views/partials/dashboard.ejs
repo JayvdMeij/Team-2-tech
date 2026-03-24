@@ -4,11 +4,12 @@
   <h1>Welcome, <%= user.username %> 🎮</h1>
   <div class="container dashboard-card">
     
+    <div class="profile-header">
     <div class="dashboard-thumbnail">
       <% if (user.thumbnail) { %>
         <img src="/uploads/<%= user.thumbnail %>" alt="Thumbnail" class="profile-thumbnail" />
       <% } else { %>
-        <img src="/images/default-thumbnail.jpg" alt="Default Thumbnail" class="profile-thumbnail placeholder-thumbnail" />
+        <img src="/images/default-thumbnail.png" alt="Default Thumbnail" class="profile-thumbnail placeholder-thumbnail" />
       <% } %>
     </div>
     
@@ -19,6 +20,8 @@
      <img src="/images/default-avatar.png" alt="Default Avatar" class="profile-avatar placeholder-avatar" />
     <% } %>
 </div>
+</div>
+
 <div class="dashboard-status">
   <h2><%= user.username %></h2>
   <p><%= user.status || 'Offline' %></p>

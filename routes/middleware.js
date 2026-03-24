@@ -18,6 +18,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+const uploadMulti = multer({ storage });
+
 function requireLogin(req, res, next) {
   if (!req.session.user) {
     return res.redirect('/login');
@@ -25,4 +27,4 @@ function requireLogin(req, res, next) {
   next();
 }
 
-module.exports = { upload, requireLogin };
+module.exports = { upload, uploadMulti, requireLogin };
