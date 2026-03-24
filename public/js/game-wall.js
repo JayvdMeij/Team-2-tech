@@ -7,9 +7,10 @@ async function loadGameWall() {
       return;
     }
 
-    const rows = ['row1', 'row2', 'row3', 'row4', 'row5', 'row6']
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
+    const wall = document.querySelector('.auth-page > div:nth-of-type(2)');
+    if (!wall) return;
+
+    const rows = Array.from(wall.children);
 
     rows.forEach((row) => {
       const shuffled = [...games].sort(() => Math.random() - 0.5);
