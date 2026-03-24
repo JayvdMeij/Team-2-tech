@@ -478,7 +478,7 @@ img {
   text-align: center;
 }
 
-.dashboard-card.profile-header {
+.dashboard-card .profile-header {
   grid-column: 1 / -1;
   grid-row: 1 / 2;
   position: relative;
@@ -588,6 +588,40 @@ img {
   color: rgba(255,255,255,0.72);
   font-size: 0.9rem;
 }
+
+
+/* Dashboard edit page adjustments */
+.edit-thumbnail input[type="file"],
+.edit-avatar input[type="file"] {
+  display: none;
+}
+
+.edit-thumbnail,
+.edit-avatar {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  border-radius: 0.5rem;
+  transition: opacity 0.25s ease;
+}
+
+.edit-thumbnail:hover .hover-overlay,
+.edit-avatar:hover .hover-overlay {
+  opacity: 1;
+}
+
 
 /****************************************************************/
                         /* footer */
