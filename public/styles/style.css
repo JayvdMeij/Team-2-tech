@@ -1091,10 +1091,6 @@ footer {
   from { opacity: 1; transform: translateY(0); }
   to   { opacity: 0; transform: translateY(20px); }
 }
-/****************************************************************/
-  to   { opacity: 0; transform: translateY(1.25rem); }
-}
-
   /****************************************************************/
                         /* MATCHING */
 /****************************************************************/
@@ -1173,8 +1169,7 @@ footer {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-  }
-}
+  }}
 
 /* Player Card Content Match */
 
