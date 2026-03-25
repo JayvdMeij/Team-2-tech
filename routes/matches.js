@@ -1,6 +1,8 @@
 const express = require('express');
-const { requireLogin } = require('./middleware');
-const dummyUsers = require('../data/users.json');
+const { requireLogin } = require('./middleware'); 
+const connectDB = require('../mongoDB');
+const { ObjectId } = require('mongodb'); 
+
 
 const router = express.Router();
 
@@ -40,13 +42,18 @@ function getMatches(currentUser, users) {
   return users.filter(user => isMatch(currentUser, user));
 }
 
-router.get('/matches', requireLogin, (req, res) => {
-  const matches = dummyUsers;
+router.get('/matches', requireLogin, async (req, res) => {
+    const db = await connectDB();
+    const usersCollection = db.collection('users');
+    
+    const users = await usersCollection.find().toArray(); // alle gebruikers ophalen
+    const currentUser = req.session.user; // huiden gebruiker sessie
 
-  res.render('pages/matches', {
-    user: req.session.user,
-    matches
-  });
+    const filteredUsers = users.filter(user => user._id.toString() !== currentUser.id.toString());
+
+    res.render('pages/matches', { 
+        matches: filteredUsers
+    });
 });
 
 module.exports = router;
