@@ -31,13 +31,12 @@
         <nav class="nav-links nav-links-left">
           <a href="/">Home</a>
           <a href="/about">About</a>
-          <a href="/contact">Contact</a>
-          <a href="/zoekbalk">Zoekbalk</a>
         </nav>
 
         <nav class="nav-links">
           <% if (currentUser) { %>
             <a href="/dashboard" class="nav-btn">Dashboard</a>
+            <a href="/dashboard" class="nav-btn">Matches</a>
             <form action="/logout" method="POST">
               <button type="submit" class="nav-btn nav-btn-button">Log out</button>
             </form>
