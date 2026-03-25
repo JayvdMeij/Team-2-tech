@@ -22,11 +22,11 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
     const db = await connectDB();
     const usersCollection = db.collection('users');
 
-    const { username, email, password, favoriteGames } = req.body;
+    const { username, email, password, favoriteGames, platform, language, playstyle } = req.body;
 
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !platform || !language || !playstyle) {
       return res.status(400).render('pages/register', {
-        error: 'Username, email en password zijn verplicht.'
+        error: 'Username, email, password, platform, language en playstyle zijn verplicht.'
       });
     }
 
@@ -39,6 +39,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
       });
     }
 
+    // Verwerk de favoriete spellen
     let parsedFavoriteGames = [];
     if (favoriteGames) {
       try {
@@ -48,18 +49,25 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
       }
     }
 
+    // Hash het wachtwoord
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Maakt nieuw gebruiker object
     const newUser = {
       username: username.trim(),
       email: normalizedEmail,
       password: hashedPassword,
       avatar: req.file ? req.file.filename : null,
       favoriteGames: parsedFavoriteGames,
+      platform: platform,       
+      language: language,       
+      playstyle: playstyle,     
       createdAt: new Date()
     };
 
+    // Voegt nieuwe gebruiker toe aan database
     await usersCollection.insertOne(newUser);
+
     res.redirect('/login');
   } catch (error) {
     console.error('Register error:', error);
@@ -99,12 +107,16 @@ router.post('/login', async (req, res) => {
       });
     }
 
+    // gebruikersgegevens sessie
     req.session.user = {
       id: user._id,
       username: user.username,
       email: user.email,
       avatar: user.avatar,
-      favoriteGames: user.favoriteGames || []
+      favoriteGames: user.favoriteGames || [],
+      platform: user.platform,   
+      language: user.language,   
+      playstyle: user.playstyle  
     };
 
     res.redirect('/dashboard');
