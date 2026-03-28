@@ -1,57 +1,47 @@
-<li class="playerCardContent">
-
-    <button type="button">Add Friend</button>
+<li class="playerCardContent" data-platform="<%= player.platform || '' %>" data-playstyle="<%= player.playstyle || '' %>" data-language="<%= player.language || '' %>">
+    <button>Add Friend</button>
 
     <!-- thumbnail -->
 
-    <div class="thumbnail">
+    <div>
         <% if (player.thumbnail) { %>
-            <img src="<%= player.thumbnail %>" alt="">
+            <img src="/uploads/<%= player.thumbnail %>" alt="">
+        <% } else { %>
+            <img src="/images/default-thumbnail.png" alt="default thumbnail">
         <% } %>
     </div>
 
-    <!-- games -->
+    <!-- avatar -->
+
     <img
-        src="<%= player.avatar ? player.avatar : '/images/player-placeholder.png' %>"
-        alt="Profielfoto van <%= player.name %>"
+        src="<%= player.avatar ? '/uploads/' + player.avatar : '/images/player-placeholder.png' %>"
+        alt="Profielfoto van <%= player.username %>"
     >
 
-    <div>
-        <!-- user information -->
-
-        <h3 class="name"><%= player.name %></h3>
-
-        <% if (player.bio) { %>
-            <p class="bio"><%= player.bio %></p>
-        <% } %>
-
-    </div>
-
-        <!-- games -->
+    <!-- user information -->
 
     <div>
-        <% if (player.platform) { %>
-            <p class="platform"><%= player.platform %></p>
-        <% } %>
-
-        <% if (player.playstyle) { %>
-            <p class="playstyle"><%= player.playstyle %></p>
-        <% } %>
-
-        <% if (player.language) { %>
-            <p class="language"><%= player.language %></p>
-        <% } %>
+        <h3 class="name"><%= player.username %></h3>
+        <p class="bio"><%= player.bio || 'No bio available' %></p>
     </div>
 
+    <div>
+        <p class="platform"><%= player.platform || 'No platform' %></p>
+        <p class="playstyle"><%= player.playstyle || 'No playstyle' %></p>
+        <p class="language"><%= player.language || 'No language' %></p>
+    </div>
+
+    <!-- favorite games -->
     <div>       
-        <% if (player.games && player.games.length) { %>
-        <ul class="games">
-            <% player.games.forEach(game => { %>
-                <li><%= game %></li>
-            <% }) %>
-        </ul>
+        <% if (player.favoriteGames && player.favoriteGames.length) { %>
+            <ul class="games">
+                <% player.favoriteGames.forEach(game => { %>
+                    <li><%= game.name %></li>
+                <% }) %>
+            </ul>
         <% } else { %>
             <p class="games">Geen games toegevoegd</p>
         <% } %>
     </div>
+    
 </li>

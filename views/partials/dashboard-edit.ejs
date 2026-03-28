@@ -1,0 +1,89 @@
+<%- include('../partials/header', { title: 'Dashboard - GameMatch' }) %>
+
+<section class="dashboard-page">
+  <h1>Welcome, <%= user.username %> 🎮</h1>
+  <div class="container dashboard-card">
+    <form action="/dashboard/edit" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="userId" value="<%= user._id %>" />
+
+      <div class="profile-header">
+      <div class="edit-thumbnail dashboard-thumbnail">
+        <% if (user.thumbnail) { %>
+          <img src="/uploads/<%= user.thumbnail %>" alt="Thumbnail" class="profile-thumbnail" />
+        <% } else { %>
+          <img src="/images/default-thumbnail.png" alt="Default Thumbnail" class="profile-thumbnail placeholder-thumbnail" />
+        <% } %>
+        <div class="hover-overlay">Change</div>
+  <input type="file" name="thumbnail" accept="image/*">
+      </div>
+    <div class="edit-avatar dashboard-avatar">
+    <% if (user.avatar) { %>
+      <img src="/uploads/<%= user.avatar %>" alt="Avatar" class="profile-avatar" />
+    <% } else { %>
+     <img src="/images/default-avatar.png" alt="Default Avatar" class="profile-avatar placeholder-avatar" />
+    <% } %>
+    <div class="hover-overlay">Change</div>
+  <input type="file" name="avatar" accept="image/*">
+</div>
+</div>
+<div class="dashboard-status">
+  <input type="text" name="username" value="<%= user.username %>" />
+  <p><%= user.status || 'Offline' %></p>
+</div>
+
+    <div class="dashboard-bio">
+<label>bio</label>
+<input type="text" name="bio" value="<%= user.bio || 'No Bio' %>" />
+</div>
+
+ <div class="dashboard-tags">
+  <label>Tags</label>
+
+  <div id="dashboard-tags">
+    <% if (user.tags && user.tags.length > 0) { %>
+      <% user.tags.forEach((tag, index) => { %>
+        <div class="tag-row">
+          <input type="text" name="tags[]" value="<%= tag %>" />
+          <button type="button" class="remove-tag">✖</button>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="tag-row">
+        <input type="text" name="tags[]" placeholder="Add a tag" />
+        <button type="button" class="remove-tag">✖</button>
+      </div>
+    <% } %>
+  </div>
+
+  <button type="button" id="add-tag-btn">+ Add tag</button>
+</div>
+
+
+
+
+      <div class="dashboard-games">
+    <label>Favorite Games</label>
+    <ul>
+      <li> <% if (user.favoriteGames && user.favoriteGames.length > 0)
+         { %><input type="text" name="favoriteGames[]" value="<%= user.favoriteGames[0].name %>" placeholder="Favorite Game 1" /><% } 
+         else { %><input type="text" name="favoriteGames[]" placeholder="Favorite Game 1" /><% } %></li>
+    </ul>
+    
+      </div>
+    
+
+    <p class="dashboard-text">
+      This page is ready for the next team step, like profiles, matches or chat.
+    </p>
+
+    <div class="hero-actions">
+      <button type="submit" class="primary-btn">Save Profile</button>
+      <a href="/" class="primary-btn">Back Home</a>
+      </form>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
+
+<script src="/js/dash-edit.js"></script>
