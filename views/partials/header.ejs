@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/styles/style.css">
   <!-- <link rel="stylesheet" href="/css/auth.css"> -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body class="<%= typeof bodyClass !== 'undefined' ? bodyClass : '' %>">
   <div class="layout shell-layout">
@@ -35,6 +36,10 @@
 
         <nav class="nav-links">
           <% if (currentUser) { %>
+            <a href="/inbox" class="nav-btn nav-inbox-link">
+              Inbox
+              <span class="inbox-badge" style="display: none;">0</span>
+            </a>
             <a href="/dashboard" class="nav-btn">Dashboard</a>
             <a href="/matches" class="nav-btn">Matches</a>
             <form action="/logout" method="POST">

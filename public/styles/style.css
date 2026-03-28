@@ -1494,3 +1494,25 @@ footer {
     color: #343434;
   }
 }
+
+.sidebar-inbox-link,
+.nav-inbox-link {
+  position: relative;
+}
+
+.inbox-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}

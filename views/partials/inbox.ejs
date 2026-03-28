@@ -1,0 +1,82 @@
+<%- include('./header') %>
+
+<div class="inbox-container">
+  <h1 class="inbox-title">Inbox</h1>
+
+  <% if (pendingRequests.length === 0) { %>
+    <p class="empty-inbox">Geen vriendschapsverzoeken op dit moment.</p>
+  <% } else { %>
+    <% pendingRequests.forEach(request => { %>
+      <div class="request-card" id="request-<%= request.from %>">
+        <img
+          class="request-avatar"
+          src="<%= request.fromAvatar ? '/uploads/' + request.fromAvatar : '/images/default-avatar.png' %>"
+          alt="avatar"
+        />
+        <div class="request-info">
+          <div class="request-username"><%= request.fromUsername %></div>
+          <div class="request-date">
+            <%= new Date(request.createdAt).toLocaleDateString('nl-NL', {
+              day: 'numeric', month: 'long', year: 'numeric'
+            }) %>
+          </div>
+        </div>
+        <div class="request-actions">
+          <button class="btn-accept" onclick="acceptRequest('<%= request.from %>')">
+            Accepteren
+          </button>
+          <button class="btn-decline" onclick="declineRequest('<%= request.from %>')">
+            Weigeren
+          </button>
+        </div>
+      </div>
+    <% }) %>
+  <% } %>
+</div>
+
+<script>
+  async function acceptRequest(fromId) {
+    try {
+      const res = await fetch(`/api/friend-request/${fromId}/accept`, { method: 'POST' });
+      const data = await res.json();
+
+      if (data.success) {
+        const card = document.getElementById(`request-${fromId}`);
+        card.innerHTML = '<p style="color: #4caf50; padding: 1rem;">Verzoek geaccepteerd!</p>';
+        setTimeout(() => card.remove(), 2000);
+        // updateBadge is defined in notifications.js
+        updateBadge(-1);
+        checkEmpty();
+      }
+    } catch (err) {
+      console.error('Accept error:', err);
+    }
+  }
+
+  async function declineRequest(fromId) {
+    try {
+      const res = await fetch(`/api/friend-request/${fromId}/decline`, { method: 'POST' });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById(`request-${fromId}`).remove();
+        updateBadge(-1);
+        checkEmpty();
+      }
+    } catch (err) {
+      console.error('Decline error:', err);
+    }
+  }
+
+  function checkEmpty() {
+    const container = document.querySelector('.inbox-container');
+    if (!container.querySelector('.request-card')) {
+      const msg = document.createElement('p');
+      msg.className = 'empty-inbox';
+      msg.textContent = 'Geen vriendschapsverzoeken op dit moment.';
+      container.appendChild(msg);
+    }
+  }
+</script>
+
+<%- include('./footer') %>
