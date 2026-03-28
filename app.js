@@ -7,6 +7,7 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const connectDB = require('./mongoDB');
+const { ObjectId } = require('mongodb');
 
 const app = express();
 const server = http.createServer(app);          
@@ -35,14 +36,34 @@ app.use((req, res, next) => {
 });
 
 // Make io accessible in routes via req.app.get('io')
-app.set('io', io);                              // ADD
+app.set('io', io);
 
-// Each logged-in user joins a personal room by their user ID
-io.on('connection', (socket) => {               // ADD
-  socket.on('join', (userId) => {               // ADD
-    socket.join(userId);                        // ADD
-  });                                           // ADD
-});                                             // ADD
+// Each logged-in user joins a personal room by their user ID.
+// On join we also check MongoDB for pending friend requests
+// that arrived while the user was offline.
+io.on('connection', (socket) => {
+  socket.on('join', async (userId) => {
+    socket.join(userId);
+
+    // Push pending friend requests to the user
+    try {
+      const db = await connectDB();
+      const user = await db.collection('users').findOne({
+        _id: new ObjectId(userId)
+      });
+
+      const pending = (user?.friendRequests || []).filter(
+        (r) => r.status === 'pending'
+      );
+
+      if (pending.length > 0) {
+        socket.emit('pending-requests', pending);
+      }
+    } catch (err) {
+      console.error('Socket join — failed to fetch pending requests:', err);
+    }
+  });
+});
 
 app.use('/', require('./routes/index'));
 
@@ -52,7 +73,7 @@ app.use((req, res) => {
 
 connectDB()
   .then(() => {
-    server.listen(port, () => {                 // CHANGED: app.listen → server.listen
+    server.listen(port, () => {
       console.log(`Server draait op http://localhost:${port}`);
     });
   })
