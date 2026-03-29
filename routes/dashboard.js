@@ -69,7 +69,7 @@ router.post('/dashboard/edit', requireLogin, upload.fields([ { name: 'avatar', m
       res.redirect('/dashboard');
     } catch (error) {
       console.error('Profile update error:', error);
-      res.status(500).send('Er ging iets mis bij het updaten van je profiel.');
+      res.status(500).send('Something went wrong while updating your profile.');
     }
   }
 );

@@ -1,5 +1,16 @@
-<li class="playerCardContent" data-platform="<%= player.platform || '' %>" data-playstyle="<%= player.playstyle || '' %>" data-language="<%= player.language || '' %>">
-    <button>Add Friend</button>
+<li class="playerCardContent" 
+    data-userid="<%= player._id %>"
+    data-platform="<%= player.platform || '' %>" 
+    data-playstyle="<%= player.playstyle || '' %>" 
+    data-language="<%= player.language || '' %>">
+
+    <% if (player.friendStatus === 'friends') { %>
+      <button class="friend-btn btn-disabled" disabled>Friends</button>
+    <% } else if (player.friendStatus === 'pending') { %>
+      <button class="friend-btn btn-disabled" disabled>Request sent</button>
+    <% } else { %>
+      <button class="friend-btn btn-add-friend" data-userid="<%= player._id %>">Add Friend</button>
+    <% } %>
 
     <!-- thumbnail -->
 
@@ -40,7 +51,7 @@
                 <% }) %>
             </ul>
         <% } else { %>
-            <p class="games">Geen games toegevoegd</p>
+            <p class="games">No favorite games added</p>
         <% } %>
     </div>
     
