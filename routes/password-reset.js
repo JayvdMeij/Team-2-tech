@@ -21,7 +21,7 @@ router.post('/forgot-password', async (req, res) => {
 
     if (!email) {
       return res.status(400).render('pages/forgot-password', {
-        error: 'Email is verplicht.',
+        error: 'Email is required.',
         success: null,
         resetLink: null
       });
@@ -58,7 +58,7 @@ router.post('/forgot-password', async (req, res) => {
   } catch (error) {
     console.error('Forgot password error:', error);
     res.status(500).render('pages/forgot-password', {
-      error: 'Er ging iets mis bij het aanvragen van een nieuw wachtwoord.',
+      error: 'Something went wrong while requesting a new password.',
       success: null,
       resetLink: null
     });
@@ -78,7 +78,7 @@ router.get('/reset-password/:token', async (req, res) => {
 
     if (!user) {
       return res.status(400).render('pages/reset-password', {
-        error: 'Deze reset link is ongeldig of verlopen.',
+        error: 'This reset link is invalid or has expired.',
         success: null,
         token,
         validToken: false
@@ -94,7 +94,7 @@ router.get('/reset-password/:token', async (req, res) => {
   } catch (error) {
     console.error('Reset password page error:', error);
     res.status(500).render('pages/reset-password', {
-      error: 'Er ging iets mis bij het openen van de reset pagina.',
+      error: 'Something went wrong while opening the reset page.',
       success: null,
       token: req.params.token,
       validToken: false
@@ -111,7 +111,7 @@ router.post('/reset-password/:token', async (req, res) => {
 
     if (!password) {
       return res.status(400).render('pages/reset-password', {
-        error: 'Password is verplicht.',
+        error: 'Password is required.',
         success: null,
         token,
         validToken: true
@@ -125,7 +125,7 @@ router.post('/reset-password/:token', async (req, res) => {
 
     if (!user) {
       return res.status(400).render('pages/reset-password', {
-        error: 'Deze reset link is ongeldig of verlopen.',
+        error: 'This reset link is invalid or has expired.',
         success: null,
         token,
         validToken: false
@@ -147,14 +147,14 @@ router.post('/reset-password/:token', async (req, res) => {
 
     res.render('pages/reset-password', {
       error: null,
-      success: 'Je wachtwoord is aangepast. Je kunt nu inloggen.',
+      success: 'Your password has been updated. You can now log in.',
       token,
       validToken: false
     });
   } catch (error) {
     console.error('Reset password error:', error);
     res.status(500).render('pages/reset-password', {
-      error: 'Er ging iets mis bij het resetten van je wachtwoord.',
+      error: 'Something went wrong while resetting your password.',
       success: null,
       token: req.params.token,
       validToken: true

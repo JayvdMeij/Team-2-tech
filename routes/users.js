@@ -27,7 +27,7 @@ router.get('/inbox', requireLogin, async (req, res) => {
     });
   } catch (err) {
     console.error('Inbox error:', err);
-    res.status(500).send('Er ging iets mis.');
+    res.status(500).send('Something went wrong.');
   }
 });
 
@@ -76,7 +76,7 @@ router.post('/api/friend-request/:fromId/accept', requireLogin, async (req, res)
     res.json({ success: true });
   } catch (err) {
     console.error('Accept friend request error:', err);
-    res.status(500).json({ error: 'Er ging iets mis.' });
+    res.status(500).json({ error: 'Something went wrong.' });
   }
 });
 
@@ -104,7 +104,7 @@ router.post('/api/friend-request/:fromId/decline', requireLogin, async (req, res
     res.json({ success: true });
   } catch (err) {
     console.error('Decline friend request error:', err);
-    res.status(500).json({ error: 'Er ging iets mis.' });
+    res.status(500).json({ error: 'Something went wrong.' });
   }
 });
 
@@ -140,7 +140,7 @@ router.get('/user/:id', requireLogin, async (req, res) => {
       _id: new ObjectId(req.params.id)
     });
 
-    if (!profileUser) return res.status(404).send('Gebruiker niet gevonden.');
+    if (!profileUser) return res.status(404).send('User not found.');
 
     const currentUserId = req.session.user.id.toString();
 
@@ -163,7 +163,7 @@ router.get('/user/:id', requireLogin, async (req, res) => {
     });
   } catch (err) {
     console.error('Profile error:', err);
-    res.status(500).send('Er ging iets mis.');
+    res.status(500).send('Something went wrong.');
   }
 });
 
@@ -179,17 +179,17 @@ router.post('/api/friend-request/:id', requireLogin, async (req, res) => {
     const fromId = req.session.user.id.toString();
 
     if (toId === fromId) {
-      return res.status(400).json({ error: 'Je kunt geen verzoek naar jezelf sturen.' });
+      return res.status(400).json({ error: 'You cannot send a friend request to yourself.' });
     }
 
     const targetUser = await usersCollection.findOne({ _id: new ObjectId(toId) });
-    if (!targetUser) return res.status(404).json({ error: 'Gebruiker niet gevonden.' });
+    if (!targetUser) return res.status(404).json({ error: 'User not found.' });
 
     const alreadySent = (targetUser.friendRequests || []).some(
       (r) => r.from.toString() === fromId
     );
     if (alreadySent) {
-      return res.status(400).json({ error: 'Verzoek al verstuurd.' });
+      return res.status(400).json({ error: 'Request already sent.' });
     }
 
     // Push friend request onto the receiver's document
@@ -219,7 +219,7 @@ router.post('/api/friend-request/:id', requireLogin, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error('Friend request error:', err);
-    res.status(500).json({ error: 'Er ging iets mis.' });
+    res.status(500).json({ error: 'Something went wrong.' });
   }
 });
 

@@ -72,7 +72,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).render('pages/register', {
-      error: 'Er ging iets mis bij het aanmaken van je account.'
+      error: 'Something went wrong while creating your account.'
     });
   }
 });
@@ -85,7 +85,7 @@ router.post('/login', async (req, res) => {
 
     if (!email || !password) {
       return res.status(400).render('pages/login', {
-        error: 'Email en password zijn verplicht.'
+        error: 'Email and password are required.'
       });
     }
 
@@ -95,7 +95,7 @@ router.post('/login', async (req, res) => {
 
     if (!user) {
       return res.status(400).render('pages/login', {
-        error: 'Ongeldig e-mailadres of wachtwoord.'
+        error: 'Invalid email or password.'
       });
     }
 
@@ -103,7 +103,7 @@ router.post('/login', async (req, res) => {
 
     if (!passwordMatch) {
       return res.status(400).render('pages/login', {
-        error: 'Ongeldig e-mailadres of wachtwoord.'
+        error: 'Invalid email or password.'
       });
     }
 
@@ -123,7 +123,7 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).render('pages/login', {
-      error: 'Er ging iets mis tijdens het inloggen.'
+      error: 'Something went wrong while logging in.'
     });
   }
 });
