@@ -1,3 +1,4 @@
+</main>
 <footer>
 
   <div>
@@ -12,3 +13,19 @@
   </ul>
 
 </footer>
+
+
+<script src="/socket.io/socket.io.js"></script>
+
+<% if (locals.currentUser) { %>
+  <script>
+    var currentUserId = "<%= locals.currentUser.id %>";
+  </script>
+<% } else { %>
+  <script>var currentUserId = null;</script>
+<% } %>
+
+<script src="/js/notifications.js"></script>
+
+</body>
+</html>

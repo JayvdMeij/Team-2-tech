@@ -1,10 +1,10 @@
 <%- include('./header') %>
 
-<div class="inbox-container">
+<section class="inbox-container">
   <h1 class="inbox-title">Inbox</h1>
 
   <% if (pendingRequests.length === 0) { %>
-    <p class="empty-inbox">Geen vriendschapsverzoeken op dit moment.</p>
+    <p class="empty-inbox">No pending friend requests.</p>
   <% } else { %>
     <% pendingRequests.forEach(request => { %>
       <div class="request-card" id="request-<%= request.from %>">
@@ -32,7 +32,7 @@
       </div>
     <% }) %>
   <% } %>
-</div>
+    </section>
 
 <script>
   async function acceptRequest(fromId) {
@@ -42,7 +42,7 @@
 
       if (data.success) {
         const card = document.getElementById(`request-${fromId}`);
-        card.innerHTML = '<p style="color: #4caf50; padding: 1rem;">Verzoek geaccepteerd!</p>';
+        card.innerHTML = '<p style="color: #4caf50; padding: 1rem;">Request accepted!</p>';
         setTimeout(() => card.remove(), 2000);
         // updateBadge is defined in notifications.js
         updateBadge(-1);
@@ -73,7 +73,7 @@
     if (!container.querySelector('.request-card')) {
       const msg = document.createElement('p');
       msg.className = 'empty-inbox';
-      msg.textContent = 'Geen vriendschapsverzoeken op dit moment.';
+      msg.textContent = 'No pending friend requests.';
       container.appendChild(msg);
     }
   }

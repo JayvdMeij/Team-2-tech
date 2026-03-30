@@ -138,6 +138,7 @@ a > span {
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  display: none;
 }
 
 .sidebar-inbox-link,
