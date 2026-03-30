@@ -1,7 +1,17 @@
-<link rel="stylesheet" href="/styles/style.css">
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> -->
+<!DOCTYPE html>
+<html lang="en">
 
-<header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    <%= typeof title !=='undefined' ? title : 'GameMatch' %>
+  </title>
+  <link rel="stylesheet" href="/styles/style.css">
+</head>
+
+<body>
+  <header>
     <nav>
       <% if (currentUser) { %>
 
@@ -10,17 +20,18 @@
 
         <a href="/inbox" class="nav-inbox-link">
           Inbox
-          <span class="inbox-badge" style="display: none;">0</span>
+          <span class="inbox-badge">0</span>
         </a>
 
         <form action="/logout" method="POST">
           <button type="submit">Log out</button>
         </form>
-      <% } else { %>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/login">Log in</a>
-      <% } %>
+        <% } else { %>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/login">Log in</a>
+          <% } %>
     </nav>
-  </div>
-</header>
+    </div>
+  </header>
+  <main>
