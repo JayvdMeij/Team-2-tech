@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const avatarPreviewWrap = document.getElementById('avatarPreviewWrap');
   const avatarPreview = document.getElementById('avatarPreview');
   const removeAvatarBtn = document.getElementById('removeAvatarBtn');
+  const fileUploadDiv = document.querySelector('.file-upload');
   const gameSearch = document.getElementById('gameSearch');
   const searchResults = document.getElementById('searchResults');
   const selectedGames = document.getElementById('selectedGames');
@@ -167,8 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!file) {
       avatarPreview.src = '';
       avatarPreviewWrap.style.display = 'none';
-      avatarInput.style.display = 'block';
-      avatarLabel.style.display = 'block';
+      fileUploadDiv.style.display = 'flex';
       return;
     }
 
@@ -182,16 +182,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     avatarPreview.src = URL.createObjectURL(file);
     avatarPreviewWrap.style.display = 'flex';
-    avatarInput.style.display = 'none';
-    avatarLabel.style.display = 'none';
+    fileUploadDiv.style.display = 'none';
   });
 
   removeAvatarBtn.addEventListener('click', () => {
     avatarInput.value = '';
     avatarPreview.src = '';
     avatarPreviewWrap.style.display = 'none';
-    avatarInput.style.display = 'block';
-    avatarLabel.style.display = 'block';
+    fileUploadDiv.style.display = 'flex';
   });
 
   showStep(1);

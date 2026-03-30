@@ -73,6 +73,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
 
     await usersCollection.insertOne(newUser);
 
+    req.session.success = 'Registration successful! Please log in.';
     res.redirect('/login');
   } catch (error) {
     console.error('Register error:', error);
@@ -129,6 +130,7 @@ router.post('/login', async (req, res) => {
       playstyle: user.playstyle
     };
 
+    req.session.success = 'Login successful!';
     res.redirect('/dashboard');
   } catch (error) {
     console.error('Login error:', error);
