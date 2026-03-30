@@ -73,8 +73,27 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
 
     await usersCollection.insertOne(newUser);
 
-    req.session.success = 'Registration successful! Please log in.';
-    res.redirect('/login');
+    const { autoLogin } = req.body;
+
+    if (autoLogin) {
+      // Automatically log the user in after successful registration
+      req.session.user = {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        avatar: newUser.avatar,
+        favoriteGames: newUser.favoriteGames || [],
+        platform: newUser.platform,
+        language: newUser.language,
+        playstyle: newUser.playstyle
+      };
+
+      req.session.success = 'Registration successful!';
+      res.redirect('/dashboard');
+    } else {
+      req.session.success = 'Registration successful! Please log in.';
+      res.redirect('/login');
+    }
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).render('pages/register', {
