@@ -1,25 +1,91 @@
-<%- include("../partials/header", { title: "Home - GameMatch", bodyClass: "home-shell" }) %>
+<%- include("../partials/header") %>
 
-<section class="hero">
-  <div></div> 
+<!-- hero section -->
+ <!-- Will add an image later (3D animation) - Charlotte -->
 
-  <div>
-    <h1>Find Gamers That<br>Match Your Playstyle</h1>
+<div class="homepagina">
+  <section>
+    <h2>Find Gamers That<br>Match Your Playstyle</h1>
 
-    <p>
-      Find players who play the same games, on the same platform,
-      at the same time as you. No random teammates. Just better matches.
-    </p>
-
+    <p>No random teammates. Just better matches.</p>
     <div>
       <% if (currentUser) { %>
-        <a href="/dashboard" class="primary-btn">Go to dashboard</a>
+        <a href="/dashboard">Go to dashboard</a>
       <% } else { %>
-        <a href="/login" class="primary-btn">Log In</a>
-        <a href="/register" class="secondary-btn">Sign Up</a>
+        <a href="/register">Get Started Free</a>
+        <a href="/login">Log in</a>
       <% } %>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- all the benefits -->
+
+  <section>
+    <h2>Why This Changes<br>Your Gaming Experience</h2>
+    <ul>
+      <li>
+        <h3>Play with people matching your schedule</h3>
+      </li>
+      <li>
+        <h3>Match by skill and experience</h3>
+      </li>
+      <li>
+        <h3>Build real gaming friendships</h3>
+      </li>
+      <li>
+        <h3>Less time searching, more time playing</h3>
+      </li>
+      <li>
+        <h3>Cross-platform compatibility</h3>
+      </li>
+      <li>
+        <h3>Instant availability visibility</h3>
+      </li>
+    </ul>
+  </section>
+
+  <!-- how the matching process works -->
+    <!-- Images on each list item still needs to be added, but the text is in place for now - Charlotte -->
+
+  <section>
+    <h2>Get Matched in Seconds!</h2>
+    <ul>
+      <li>
+        <h3>1. Create Your Profile</h3>
+        <p>Personalise your profile with your gaming preferences, skill level, and schedule.</p>
+      </li>
+      <li>
+        <h3>2. Get Matched</h3>
+        <p>Our algorithm finds gamers who fit your profile and are available to play.</p>
+      </li>
+      <li>
+        <h3>3. Connect and Play</h3>
+        <p>Chat with your matches, set up gaming sessions, and start playing together.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- information section about the API and technology -->
+
+  <section>
+    <h2>Behind the Platform</h2>
+    <ul>
+      <li>
+        <h3>Game Data (API)</h3>
+        <p>We use the RAWG API to fetch up-to-date information about games, including titles, genres, and supported platforms. This ensures that all data on the platform is accurate and consistent, so users can easily find matches based on real and current game information.</p>
+      </li>
+      <li>
+        <h3>Backend</h3>
+        <p>The backend is built with Node.js and uses MongoDB to store user profiles and preferences. This allows the system to process filters and match players based on shared games, platforms, availability, and experience, creating more relevant and accurate matches.</p>
+      </li>
+      <li>
+        <h3>Frontend</h3>
+        <p>The frontend is developed with HTML, CSS, and JavaScript, providing a smooth and simple interface. Users can easily search, filter, and view profiles, making it simple to quickly find and connect with the right gaming partners.</p>
+      </li>
+    </ul>
+  </section>
+
+
+</div>
 
 <%- include("../partials/footer") %>
