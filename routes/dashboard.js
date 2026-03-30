@@ -19,7 +19,10 @@ router.get('/dashboard', requireLogin, async (req, res) => {
     return res.status(404).send('User not found');
   }
 
-  res.render('partials/dashboard', { user: req.session.user });
+  const success = req.session.success;
+  delete req.session.success;
+
+  res.render('partials/dashboard', { user: req.session.user, success });
 });
 
 router.get('/dashboard/edit', requireLogin, async (req, res) => {

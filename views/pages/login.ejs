@@ -21,6 +21,10 @@
         <div id="authError"><%= error %></div>
       <% } %>
 
+      <% if (success) { %>
+        <div id="authSuccess"><%= success %></div>
+      <% } %>
+
       <%- include('../partials/log-form') %>
 
       <p>
