@@ -5,7 +5,12 @@
         <input type="password" name="password" placeholder="Password" required />
 
         <label id="avatarLabel" for="avatar">Upload Avatar</label>
-        <input type="file" name="avatar" id="avatar"  accept="image/*"/>
+
+        <div class="file-upload">
+            <input type="file" name="avatar" id="avatar" accept="image/*" />
+            <label for="avatar" class="file-upload-btn">Choose file</label>
+            <span id="fileName">No file chosen</span>
+        </div>
 
         <div id="avatarPreviewWrap">
             <img id="avatarPreview" alt="Avatar preview" />
@@ -21,7 +26,7 @@
         <!-- <p id="registerOptionalText">These details are optional, so you can skip this step for now.</p> -->
 
         <label for="platform">Platform</label>
-        <select name="platform" id="platform">
+        <select id="platform">
             <option value="">Choose a platform</option>
             <option value="pc">PC</option>
             <option value="switch">Switch</option>
@@ -30,8 +35,10 @@
             <option value="xbox">Xbox</option>
         </select>
 
+        <div id="selectedPlatforms" class="selected-pills"></div>
+
         <label for="language">Language</label>
-        <select name="language" id="language">
+        <select id="language">
             <option value="">Choose a language</option>
             <option value="dutch">Dutch</option>
             <option value="english">English</option>
@@ -43,12 +50,16 @@
             <option value="korean">Korean</option>
         </select>
 
+        <div id="selectedLanguages" class="selected-pills"></div>
+
         <label for="playstyle">Playstyle</label>
-        <select name="playstyle" id="playstyle">
+        <select id="playstyle">
             <option value="">Choose a playstyle</option>
             <option value="casual">Casual</option>
             <option value="competitive">Competitive</option>
         </select>
+
+        <div id="selectedPlaystyles" class="selected-pills"></div>
 
         <label for="gameSearch">Favorite games</label>
         <div id="gameSearchField">
@@ -61,7 +72,7 @@
 
         <div data-actions>
             <button type="button" id="backStepBtn">Back</button>
-            <button type="submit" id="skipStepBtn">Skip for now</button>
+            <!-- <button type="submit" id="skipStepBtn">Skip for now</button> -->
             <button type="submit" class="primary-btn">Create Account</button>
         </div>
     </div>

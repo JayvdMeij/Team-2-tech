@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectedGames = document.getElementById('selectedGames');
   const favoriteGamesInput = document.getElementById('favoriteGamesInput');
 
+  const platformSelect = document.getElementById('platform');
+  const languageSelect = document.getElementById('language');
+  const playstyleSelect = document.getElementById('playstyle');
+  const selectedPlatforms = document.getElementById('selectedPlatforms');
+  const selectedLanguages = document.getElementById('selectedLanguages');
+  const selectedPlaystyles = document.getElementById('selectedPlaystyles');
+
   if (!registerForm || !registerCard || !registerStep1 || !registerStep2 || !avatarInput || !gameSearch) {
     return;
   }
@@ -111,6 +118,48 @@ document.addEventListener('DOMContentLoaded', () => {
       searchResults.appendChild(item);
     });
   }
+
+  function setupTagSelect(selectElement, outputElement, inputName) {
+    if (!selectElement || !outputElement) return;
+
+    const selectedValues = new Set();
+
+    selectElement.addEventListener('change', () => {
+      const value = selectElement.value;
+      const text = selectElement.options[selectElement.selectedIndex].text;
+
+      if (!value || selectedValues.has(value)) {
+        selectElement.value = '';
+        return;
+      }
+
+      selectedValues.add(value);
+
+      const tag = document.createElement('div');
+      tag.innerHTML = `
+        <span>${text}</span>
+        <button type="button">&times;</button>
+        <input type="hidden" name="${inputName}" value="${value}">
+      `;
+
+      tag.querySelector('button').addEventListener('click', () => {
+        selectedValues.delete(value);
+        tag.remove();
+
+        if (outputElement.children.length === 0) {
+          outputElement.style.display = 'none';
+        }
+      });
+
+      outputElement.appendChild(tag);
+      outputElement.style.display = 'flex';
+      selectElement.value = '';
+    });
+  }
+
+  setupTagSelect(platformSelect, selectedPlatforms, 'platform[]');
+  setupTagSelect(languageSelect, selectedLanguages, 'language[]');
+  setupTagSelect(playstyleSelect, selectedPlaystyles, 'playstyle[]');
 
   avatarInput.addEventListener('change', () => {
     const file = avatarInput.files[0];

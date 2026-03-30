@@ -26,20 +26,28 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
 
     if (!username || !email || !password || !platform || !language || !playstyle) {
       return res.status(400).render('pages/register', {
-        error: 'Username, email, password, platform, language en playstyle zijn verplicht.'
+        error: 'Username, email, password, platform, language and playstyle are required.'
       });
     }
 
     const normalizedEmail = email.toLowerCase().trim();
-    const existingUser = await usersCollection.findOne({ email: normalizedEmail });
+    const normalizedUsername = username.trim();
+
+    const existingUser = await usersCollection.findOne({
+      $or: [
+        { email: normalizedEmail },
+        { username: normalizedUsername }
+      ]
+    });
 
     if (existingUser) {
       return res.status(400).render('pages/register', {
-        error: 'Er bestaat al een account met dit e-mailadres.'
+        error: existingUser.email === normalizedEmail
+          ? 'An account with this email address already exists.'
+          : 'This username is already taken.'
       });
     }
 
-    // Verwerk de favoriete spellen
     let parsedFavoriteGames = [];
     if (favoriteGames) {
       try {
@@ -49,23 +57,20 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
       }
     }
 
-    // Hash het wachtwoord
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Maakt nieuw gebruiker object
     const newUser = {
-      username: username.trim(),
+      username: normalizedUsername,
       email: normalizedEmail,
       password: hashedPassword,
       avatar: req.file ? req.file.filename : null,
       favoriteGames: parsedFavoriteGames,
-      platform: platform,       
-      language: language,       
-      playstyle: playstyle,     
+      platform,
+      language,
+      playstyle,
       createdAt: new Date()
     };
 
-    // Voegt nieuwe gebruiker toe aan database
     await usersCollection.insertOne(newUser);
 
     res.redirect('/login');
@@ -81,21 +86,27 @@ router.post('/login', async (req, res) => {
   try {
     const db = await connectDB();
     const usersCollection = db.collection('users');
-    const { email, password } = req.body;
+    const { login, password } = req.body;
 
-    if (!email || !password) {
+    if (!login || !password) {
       return res.status(400).render('pages/login', {
-        error: 'Email and password are required.'
+        error: 'Username/email and password are required.'
       });
     }
 
+    const loginInput = login.trim();
+    const normalizedLogin = loginInput.toLowerCase();
+
     const user = await usersCollection.findOne({
-      email: email.toLowerCase().trim()
+      $or: [
+        { email: normalizedLogin },
+        { username: loginInput }
+      ]
     });
 
     if (!user) {
       return res.status(400).render('pages/login', {
-        error: 'Invalid email or password.'
+        error: 'Invalid username/email or password.'
       });
     }
 
@@ -103,20 +114,19 @@ router.post('/login', async (req, res) => {
 
     if (!passwordMatch) {
       return res.status(400).render('pages/login', {
-        error: 'Invalid email or password.'
+        error: 'Invalid username/email or password.'
       });
     }
 
-    // gebruikersgegevens sessie
     req.session.user = {
       id: user._id,
       username: user.username,
       email: user.email,
       avatar: user.avatar,
       favoriteGames: user.favoriteGames || [],
-      platform: user.platform,   
-      language: user.language,   
-      playstyle: user.playstyle  
+      platform: user.platform,
+      language: user.language,
+      playstyle: user.playstyle
     };
 
     res.redirect('/dashboard');

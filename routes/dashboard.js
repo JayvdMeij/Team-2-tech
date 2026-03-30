@@ -22,6 +22,16 @@ router.get('/dashboard', requireLogin, async (req, res) => {
   res.render('partials/dashboard', { user: req.session.user });
 });
 
+router.get('/dashboard', (req, res) => {
+  const success = req.session.successMessage || null;
+  req.session.successMessage = null;
+
+  res.render('pages/dashboard', {
+    user: req.session.user,
+    success
+  });
+});
+
 router.get('/dashboard/edit', requireLogin, async (req, res) => {
   const db = await connectDB();
   const usersCollection = db.collection('users');
