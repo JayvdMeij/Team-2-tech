@@ -21,7 +21,7 @@ router.get('/inbox', requireLogin, async (req, res) => {
       (r) => r.status === 'pending'
     );
 
-    res.render('partials/inbox', {
+    res.render('pages/inbox', {
       user: req.session.user,
       pendingRequests
     });
