@@ -19,7 +19,10 @@ router.get('/dashboard', requireLogin, async (req, res) => {
     return res.status(404).send('User not found');
   }
 
-  res.render('partials/dashboard', { user: req.session.user });
+  const success = req.session.success;
+  delete req.session.success;
+
+  res.render('partials/dashboard', { user: req.session.user, success });
 });
 
 router.get('/dashboard/edit', requireLogin, async (req, res) => {
@@ -74,7 +77,7 @@ console.log('Updated user data:', req.session.user);
       res.redirect('/dashboard');
     } catch (error) {
       console.error('Profile update error:', error);
-      res.status(500).send('Er ging iets mis bij het updaten van je profiel.');
+      res.status(500).send('Something went wrong while updating your profile.');
     }
   }
 );

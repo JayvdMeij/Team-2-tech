@@ -26,13 +26,13 @@
     <% } %>
 
     <% if (alreadyFriends) { %>
-      <button class="btn btn-disabled" disabled>✅ Vrienden</button>
+      <button class="btn btn-disabled" disabled>Friends</button>
     <% } else if (alreadySent) { %>
-      <button class="btn btn-disabled" disabled>⏳ Verzoek verstuurd</button>
+      <button class="btn btn-disabled" disabled>Request sent</button>
     <% } else { %>
       <button class="btn btn-primary" id="addFriendBtn"
               data-userid="<%= profileUser._id %>">
-        ➕ Vriendschapsverzoek sturen
+        Add Friend
       </button>
     <% } %>
 
@@ -45,21 +45,21 @@
     addBtn.addEventListener('click', async () => {
       const userId = addBtn.dataset.userid;
       addBtn.disabled = true;
-      addBtn.textContent = 'Versturen...';
+      addBtn.textContent = 'Sending...';
 
       try {
         const res = await fetch(`/api/friend-request/${userId}`, { method: 'POST' });
         const data = await res.json();
 
         if (data.success) {
-          addBtn.textContent = '⏳ Verzoek verstuurd';
+          addBtn.textContent = 'Request sent';
           addBtn.classList.replace('btn-primary', 'btn-disabled');
         } else {
-          addBtn.textContent = data.error || 'Mislukt';
+          addBtn.textContent = data.error || 'Failed';
           addBtn.disabled = false;
         }
       } catch {
-        addBtn.textContent = 'Fout, probeer opnieuw';
+        addBtn.textContent = 'Error, try again';
         addBtn.disabled = false;
       }
     });

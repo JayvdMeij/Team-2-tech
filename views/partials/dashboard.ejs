@@ -1,6 +1,7 @@
 <%- include('../partials/header', { title: 'Dashboard - GameMatch' }) %>
 
 <section class="dashboard-page">
+  
   <h1>Welcome, <%= user.username %> 🎮</h1>
   <div class="container dashboard-card">
     
@@ -66,7 +67,9 @@
   <% } %>
 </div>
 </div>
-
+    <% if (success) { %>
+      <div id="authSuccess"><%= success %></div>
+    <% } %> <!--Kan je weghalen als t niet werkt*-->
 
 
       <div class="dashboard-games">

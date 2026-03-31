@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const options = {
         valueNames: ['name', 'bio', 'platform', 'playstyle', 'language', 'games']
     };
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // alle gebruikers laten zien bij 'filteren' moet nog veranderd worden (styling)
         if (value === 'all') {
-            usersList.filter(); 
+            usersList.filter();
             return;
         }
 
@@ -37,4 +37,39 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     usersList.sort('name', { order: 'asc' });
+});
+
+// add friend button logic
+document.querySelectorAll('.btn-add-friend').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+        const userId = btn.dataset.userid;
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+
+        try {
+            const res = await fetch(`/api/friend-request/${userId}`, {
+                method: 'POST'
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                btn.textContent = 'Request sent';
+                btn.classList.remove('btn-add-friend');
+                btn.classList.add('btn-disabled');
+            } else {
+                btn.textContent = data.error || 'Failed';
+                setTimeout(() => {
+                    btn.textContent = 'Add Friend';
+                    btn.disabled = false;
+                }, 2000);
+            }
+        } catch (err) {
+            console.error('Friend request error:', err);
+            btn.textContent = 'Error, try again';
+            setTimeout(() => {
+                btn.textContent = 'Add Friend';
+                btn.disabled = false;
+            }, 2000);
+        }
+    });
 });

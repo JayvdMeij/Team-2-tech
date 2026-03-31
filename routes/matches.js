@@ -8,32 +8,27 @@ const router = express.Router();
 // MATCHING
 // De matching logica laat zien of de gebruiker minstens 1 overeenkomst heeft met een andere gebruiker.
 
-// Functie om te controleren of er een match is tussen twee gebruikers
 function isMatch(currentUser, candidateUser) {
   const currentGames = currentUser.favoriteGames || [];
-  const candidateGames = candidateUser.favoriteGames || []; // Opruimen naar favoriteGames voor consistentie
+  const candidateGames = candidateUser.favoriteGames || [];
 
   const hasSameGame = candidateGames.some(game => currentGames.includes(game));
 
-  // Check platform
   const hasSamePlatform =
     currentUser.platform &&
     candidateUser.platform &&
     currentUser.platform === candidateUser.platform;
 
-  // Check playstyle
   const hasSamePlaystyle =
     currentUser.playstyle &&
     candidateUser.playstyle &&
     currentUser.playstyle === candidateUser.playstyle;
 
-  // Check language
   const hasSameLanguage =
     currentUser.language &&
     candidateUser.language &&
     currentUser.language === candidateUser.language;
 
-  // match? return true
   return hasSameGame || hasSamePlatform || hasSamePlaystyle || hasSameLanguage;
 }
 
@@ -48,19 +43,43 @@ router.get('/matches', requireLogin, async (req, res) => {
 
     const users = await usersCollection.find().toArray();
     const currentUser = req.session.user;
+    const currentUserId = currentUser.id.toString();
 
-    const filteredUsers = users.filter(user => user._id.toString() !== currentUser.id.toString());
+    // Filter out the current user
+    const filteredUsers = users.filter(user => user._id.toString() !== currentUserId);
 
     const matches = getMatches(currentUser, filteredUsers);
 
-    // render matches pagina met gevonden matches
+    // For each match, determine the friendship status so the playerCard
+    // knows which button to show: 'add', 'pending', or 'friends'
+    const matchesWithStatus = matches.map(match => {
+      const matchIdStr = match._id.toString();
+
+      // Check if already friends (current user is in match's friends array)
+      const isFriends = (match.friends || []).some(
+        (id) => id.toString() === currentUserId
+      );
+
+      // Check if request already sent (current user is in match's friendRequests)
+      const isPending = (match.friendRequests || []).some(
+        (r) => r.from.toString() === currentUserId && r.status === 'pending'
+      );
+
+      let friendStatus = 'add';
+      if (isFriends) friendStatus = 'friends';
+      else if (isPending) friendStatus = 'pending';
+
+      return { ...match, friendStatus };
+    });
+
     res.render('pages/matches', {
-      matches: matches
+      matches: matchesWithStatus
     });
   } catch (error) {
     console.error('Matching error:', error);
     res.status(500).render('pages/matches', {
-      error: 'Er ging iets mis gegaan bij de matching.'
+      matches: [],
+      error: 'Something went wrong while fetching matches. Please try again later.'
     });
   }
 });
