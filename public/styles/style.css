@@ -1162,7 +1162,7 @@ footer {
   transform: translateX(-50%);
 }
 
-.dashboard-card.profile-avatar {
+.dashboard-card .profile-avatar {
   width: 8.125rem;
   height: 8.125rem;
   border-radius: 50%;
@@ -1194,6 +1194,7 @@ footer {
 }
 
 .dashboard-tags {
+  grid-column: 1 / 3;
   grid-row: 4 / 5;
   text-align: left;
 }
@@ -1249,8 +1250,68 @@ footer {
   font-size: 0.9rem;
 }
 
+.dashboard-bio p{
+  width: 90%;
+  padding: 0.875rem 0.9375rem;
+  border-radius: 0.625rem;
+  border: 0.0625rem solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  outline: none;
+  font: inherit;
+}
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.45rem 0.9rem;
+  background: rgba(255,255,255,0.08);
+  border-radius: 0.6rem;
+
+  font-size: 0.9rem;
+  color: white;
+
+  margin: 0.25rem;
+}
+
+.tag-pill button.remove-tag {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.tag-pill button.remove-tag:hover {
+  color: white;
+}
+
+.tag-list {
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+
+
 
 /* Dashboard edit page adjustments */
+
+.dashboard-status input[type="text"],
+.dashboard-bio textarea,
+.dashboard-games input[type="text"] {
+  width: 100%;
+  padding: 0.875rem 0.9375rem;
+  border-radius: 0.625rem;
+  border: 0.0625rem solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  outline: none;
+  font: inherit;
+}
 .edit-thumbnail input[type="file"],
 .edit-avatar input[type="file"] {
   display: none;
@@ -1282,12 +1343,52 @@ footer {
   opacity: 1;
 }
 
+.edit-avatar{
+   width: 8.125rem;
+  height: 8.125rem;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 1.125rem auto;
+  border: 0.1875rem solid rgba(255,255,255,0.15);
+  left: -35%
+}
+
+.edit-thumbnail {
+   position: absolute;
+  inset: 0;
+}
+
+.tag-options {
+  background: #222;
+  padding: .5rem;
+  border-radius: .5rem;
+  margin-top: .5rem;
+}
+
+.tag-option {
+  padding: .3rem .5rem;
+  background: #333;
+  margin-bottom: .3rem;
+  cursor: pointer;
+  border-radius: .3rem;
+}
+
+.tag-option:hover {
+  background: #444;
+}
+
+.hidden {
+  display: none;
+}
+
+
+
 /****************************************************************/
                         /* Dashboard */
 /****************************************************************/
 
 .dashboard-games {
-  grid-row: 3 / 4;
+  grid-row: 3 / 5;
   grid-column: 4 / 6;
   margin-top: 1.5rem;
   grid-column: 3 / 5;

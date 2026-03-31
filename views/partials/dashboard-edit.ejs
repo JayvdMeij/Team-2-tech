@@ -1,13 +1,14 @@
 <%- include('../partials/header', { title: 'Dashboard - GameMatch' }) %>
-
+ <form action="/dashboard/edit" method="POST" enctype="multipart/form-data">
 <section class="dashboard-page">
   <h1>Welcome, <%= user.username %> 🎮</h1>
   <div class="container dashboard-card">
-    <form action="/dashboard/edit" method="POST" enctype="multipart/form-data">
+   
       <input type="hidden" name="userId" value="<%= user._id %>" />
 
       <div class="profile-header">
-      <div class="edit-thumbnail dashboard-thumbnail">
+
+      <div class="edit-thumbnail">
         <% if (user.thumbnail) { %>
           <img src="/uploads/<%= user.thumbnail %>" alt="Thumbnail" class="profile-thumbnail" />
         <% } else { %>
@@ -16,6 +17,7 @@
         <div class="hover-overlay">Change</div>
   <input type="file" name="thumbnail" accept="image/*">
       </div>
+
     <div class="edit-avatar dashboard-avatar">
     <% if (user.avatar) { %>
       <img src="/uploads/<%= user.avatar %>" alt="Avatar" class="profile-avatar" />
@@ -26,49 +28,145 @@
   <input type="file" name="avatar" accept="image/*">
 </div>
 </div>
+
 <div class="dashboard-status">
   <input type="text" name="username" value="<%= user.username %>" />
   <p><%= user.status || 'Offline' %></p>
 </div>
 
     <div class="dashboard-bio">
-<label>bio</label>
-<input type="text" name="bio" value="<%= user.bio || 'No Bio' %>" />
+  <label>Bio</label>
+  <textarea name="bio"><%= user.bio %></textarea> <!-- holy text area -->
 </div>
 
- <div class="dashboard-tags">
-  <label>Tags</label>
+ 
+  <div class="dashboard-tags">
+<label>Tags</label>
+ <div class="dashboard-platforms">
+  <label>Platforms</label>
 
-  <div id="dashboard-tags">
-    <% if (user.tags && user.tags.length > 0) { %>
-      <% user.tags.forEach((tag, index) => { %>
-        <div class="tag-row">
-          <input type="text" name="tags[]" value="<%= tag %>" />
+  <div id="platform-list" class="tag-list">
+    <% if (user.platform && user.platform.length > 0) { %>
+      <% user.platform.forEach(platform => { %>
+        <div class="tag-pill">
+          <span><%= platform %></span>
+          <input type="hidden" name="platform[]" value="<%= platform %>">
+          <button type="button" class="remove-tag">✖</button>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+
+  <button type="button" id="add-platform-btn">+ Add platform</button>
+
+  <div id="platform-options" class="tag-options hidden">
+    <% const allPlatform = ["PC", "PlayStation", "Xbox", "Switch", "Mobile"]; %>
+    <% allPlatform.forEach(p => { %>
+      <% if (!user.platform || !user.platform.includes(p)) { %>
+        <div class="tag-option" data-value="<%= p %>"><%= p %></div>
+      <% } %>
+    <% }) %>
+  </div>
+</div>
+
+<div class="dashboard-playstyles"> 
+  <label>Playstyles</label>
+  <div id="playstyle-list" class="tag-list">
+    <% if (user.playstyle && user.playstyle.length > 0) { %>
+      <% user.playstyle.forEach(playstyle => { %>
+        <div class="tag-pill">
+          <span><%= playstyle %></span>
+          <input type="hidden" name="playstyle[]" value="<%= playstyle %>">
+          <button type="button" class="remove-tag">✖</button>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+
+
+  <button type="button" id="add-playstyle-btn">+ Add playstyle</button>
+</div>
+
+<div id="playstyle-options" class="tag-options hidden">
+  <% const allPlaystyles = ["Casual", "Competitive", "Co-op", "Single-player", "Role-playing"]; %>
+  <% allPlaystyles.forEach(ps => { %>
+    <% if (!user.playstyle || !user.playstyle.includes(ps)) { %>
+      <div class="tag-option" data-value="<%= ps %>"><%= ps %></div>
+    <% } %>
+  <% }) %>
+</div>
+
+
+<div class="dashboard-languages">
+  <label>Languages</label>
+
+  <div id="language-list" class="tag-list">
+    <% if (user.language && user.language.length > 0) { %>
+      <% user.language.forEach(language => { %>
+        <div class="tag-pill">
+          <span><%= language %></span>
+          <input type="hidden" name="language[]" value="<%= language %>">
+          <button type="button" class="remove-tag">✖</button>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+
+  <button type="button" id="add-language-btn">+ Add language</button>
+
+  <div id="language-options" class="tag-options hidden">
+    <% const allLanguage = ["Dutch","English", "Spanish", "French", "German", "Chinese", "Japanese", "Korean"]; %>
+    <% allLanguage.forEach(l => { %>
+      <% if (!user.language || !user.language.includes(l)) { %>
+        <div class="tag-option" data-value="<%= l %>"><%= l %></div>
+      <% } %>
+    <% }) %>
+  </div>
+</div>
+
+
+  <label>Custom Tags</label>
+
+  <div id="custom-tag-list" class="tag-list">
+    <% if (user.customTag && user.customTag.length > 0) { %>
+      <% user.customTag.forEach((tag, index) => { %>
+        <div class="tag-pill">
+          <span><%= tag %></span>
+          <input type="hidden" name="customTag[]" value="<%= tag %>">
           <button type="button" class="remove-tag">✖</button>
         </div>
       <% }) %>
     <% } else { %>
-      <div class="tag-row">
-        <input type="text" name="tags[]" placeholder="Add a tag" />
-        <button type="button" class="remove-tag">✖</button>
+      <div class="custom-tag-input-row">
+        <input type="text" id="custom-tag-input-row" placeholder="Add a custom tag" />
+        <button type="button" id="add-custom-tag-btn">Add</button>
       </div>
     <% } %>
   </div>
-
-  <button type="button" id="add-tag-btn">+ Add tag</button>
 </div>
 
 
 
 
       <div class="dashboard-games">
-    <label>Favorite Games</label>
+   <label for="gameSearch">Favorite games</label>
+   <% if (user.favoriteGames && user.favoriteGames.length > 0) { %>
     <ul>
-      <li> <% if (user.favoriteGames && user.favoriteGames.length > 0)
-         { %><input type="text" name="favoriteGames[]" value="<%= user.favoriteGames[0].name %>" placeholder="Favorite Game 1" /><% } 
-         else { %><input type="text" name="favoriteGames[]" placeholder="Favorite Game 1" /><% } %></li>
+      <% user.favoriteGames.forEach(game => { %>
+        <li><%= game.name, game.background_image %></li>
+      <% }) %>
     </ul>
-    
+   <% } else { %>
+    <p>No favorite games added yet.</p>
+   <% } %>
+        <div id="gameSearchField">
+            <input type="text" id="gameSearch" placeholder="Search for games..." autocomplete="off" />
+            <div id="searchResults"></div>
+        </div>
+
+        <div id="selectedGames"></div>
+        <input type="hidden" name="favoriteGames" id="favoriteGamesInput" />
+
       </div>
     
 
@@ -79,7 +177,7 @@
     <div class="hero-actions">
       <button type="submit" class="primary-btn">Save Profile</button>
       <a href="/" class="primary-btn">Back Home</a>
-      </form>
+      
     </div>
   </div>
 </section>
@@ -87,3 +185,5 @@
 <%- include('../partials/footer') %>
 
 <script src="/js/dash-edit.js"></script>
+<script src="/js/register.js"></script>
+</form>

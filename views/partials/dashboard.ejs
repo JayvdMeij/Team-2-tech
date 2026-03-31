@@ -6,6 +6,7 @@
   <div class="container dashboard-card">
     
     <div class="profile-header">
+
     <div class="dashboard-thumbnail">
       <% if (user.thumbnail) { %>
         <img src="/uploads/<%= user.thumbnail %>" alt="Thumbnail" class="profile-thumbnail" />
@@ -35,15 +36,36 @@
 
     <div class="dashboard-tags">
 <label>Tags</label>
-<ul>
-  <% if (user.tags && user.tags.length > 0) { %>
-    <% user.tags.forEach(tag => { %>
-      <li><%= tag %></li>
+<div class="tag-list">
+  <% if (user.language && user.language.length > 0) { %>
+    <% user.language.forEach(language => { %>
+      <div class="tag-pill">
+        <span><%= language %></span>
+      </div>
     <% }) %>
-    <% } else { %>
-      <li>No tags</li>
   <% } %>
-</ul>
+  <% if (user.playstyle && user.playstyle.length > 0) { %>
+    <% user.playstyle.forEach(playstyle => { %>
+      <div class="tag-pill">
+        <span><%= playstyle %></span>
+      </div>
+    <% }) %>
+  <% } %>
+  <% if (user.platform && user.platform.length > 0) { %>
+    <% user.platform.forEach(platform => { %>
+      <div class="tag-pill">
+        <span><%= platform %></span>
+      </div>
+    <% }) %>
+  <% } %>
+  <% if (user.customTags && user.customTags.length > 0) { %>
+    <% user.customTags.forEach(tag => { %>
+      <div class="tag-pill">
+        <span><%= tag %></span>
+      </div>
+    <% }) %>
+  <% } %>
+</div>
 </div>
     <% if (success) { %>
       <div id="authSuccess"><%= success %></div>
@@ -68,7 +90,7 @@
     </p>
 
     <div class="hero-actions">
-      <a href="/dashboard/edit?id=<%= user._id %>" class="primary-btn">Edit Profile</a>
+      <a href="/dashboard/edit" class="primary-btn">Edit Profile</a>
       <a href="/" class="primary-btn">Back Home</a>
       <form action="/logout" method="POST">
         <button type="submit" class="secondary-btn dashboard-logout-btn">Log Out</button>

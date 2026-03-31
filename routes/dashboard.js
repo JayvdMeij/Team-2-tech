@@ -48,18 +48,23 @@ router.post('/dashboard/edit', requireLogin, upload.fields([ { name: 'avatar', m
       const updateData = {
         username: username.trim(),
         bio: bio.trim(),
-        tags: Array.isArray(tags) ? tags : []
+        platform: Array.isArray(req.body.platform) ? req.body.platform : [],
+        language: Array.isArray(req.body.language) ? req.body.language : [],
+        playstyle: Array.isArray(req.body.playstyle) ? req.body.playstyle : [],
+        customTag: Array.isArray(req.body.customTag) ? req.body.customTag : []
+
       };
 
       // Avatar upload
       if (req.files.avatar) {
-        updateData.avatar = req.files.avatar[0].filename;
+        updateData.avatar = req.files.avatar[0].filename
       }
 
       // Thumbnail upload
       if (req.files.thumbnail) {
-        updateData.thumbnail = req.files.thumbnail[0].filename;
+        updateData.thumbnail = req.files.thumbnail[0].filename
       }
+    
 
       await usersCollection.updateOne(
         { _id: new ObjectId(req.session.user) },
@@ -68,7 +73,7 @@ router.post('/dashboard/edit', requireLogin, upload.fields([ { name: 'avatar', m
 
       // Update session
       Object.assign(req.session.user, updateData);
-
+console.log('Updated user data:', req.session.user);
       res.redirect('/dashboard');
     } catch (error) {
       console.error('Profile update error:', error);
