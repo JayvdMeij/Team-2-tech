@@ -14,8 +14,9 @@
         <% } else { %>
           <img src="/images/default-thumbnail.png" alt="Default Thumbnail" class="profile-thumbnail placeholder-thumbnail" />
         <% } %>
-        <div class="hover-overlay">Change</div>
-  <input type="file" name="thumbnail" accept="image/*">
+        <div class="hover-overlay"><label for="thumbnail">Change</label>
+  <input id="thumbnail" type="file" name="thumbnail" accept="image/*">
+  </div>
       </div>
 
     <div class="edit-avatar dashboard-avatar">
@@ -24,8 +25,8 @@
     <% } else { %>
      <img src="/images/default-avatar.png" alt="Default Avatar" class="profile-avatar placeholder-avatar" />
     <% } %>
-    <div class="hover-overlay">Change</div>
-  <input type="file" name="avatar" accept="image/*">
+    <div class="hover-overlay"><label for="avatar">Change</label></div>
+  <input id="avatar" type="file" name="avatar" accept="image/*">
 </div>
 </div>
 
@@ -121,27 +122,6 @@
         <div class="tag-option" data-value="<%= l %>"><%= l %></div>
       <% } %>
     <% }) %>
-  </div>
-</div>
-
-
-  <label>Custom Tags</label>
-
-  <div id="custom-tag-list" class="tag-list">
-    <% if (user.customTag && user.customTag.length > 0) { %>
-      <% user.customTag.forEach((tag, index) => { %>
-        <div class="tag-pill">
-          <span><%= tag %></span>
-          <input type="hidden" name="customTag[]" value="<%= tag %>">
-          <button type="button" class="remove-tag">✖</button>
-        </div>
-      <% }) %>
-    <% } else { %>
-      <div class="custom-tag-input-row">
-        <input type="text" id="custom-tag-input-row" placeholder="Add a custom tag" />
-        <button type="button" id="add-custom-tag-btn">Add</button>
-      </div>
-    <% } %>
   </div>
 </div>
 
