@@ -22,7 +22,12 @@ router.get('/dashboard', requireLogin, async (req, res) => {
   const success = req.session.success;
   delete req.session.success;
 
-  res.render('partials/dashboard', { user: req.session.user, success });
+  Object.assign(req.session.user, {
+    ...user,
+    id: user._id.toString()
+  });
+
+  res.render('partials/dashboard', { user, success });
 });
 
 router.get('/dashboard/edit', requireLogin, async (req, res) => {
@@ -30,14 +35,14 @@ router.get('/dashboard/edit', requireLogin, async (req, res) => {
   const usersCollection = db.collection('users');
 
   const user = await usersCollection.findOne({
-    _id: new ObjectId(req.session.user)
+    _id: new ObjectId(req.session.user.id)
   });
 
   if (!user) {
     return res.status(404).send("User not found");
   }
 
-  res.render('partials/dashboard-edit', { user: req.session.user });
+  res.render('partials/dashboard-edit', { user });
 });
 router.post('/dashboard/edit', requireLogin, upload.fields([ { name: 'avatar', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), async (req, res) => {
     try {
@@ -76,7 +81,7 @@ router.post('/dashboard/edit', requireLogin, upload.fields([ { name: 'avatar', m
     
 
       await usersCollection.updateOne(
-        { _id: new ObjectId(req.session.user) },
+        { _id: new ObjectId(req.session.user.id) },
         { $set: updateData }
       );
 
