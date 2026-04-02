@@ -102,11 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         item.addEventListener('click', () => {
           if (!selected.some((g) => g.id === game.id)) {
-            selected.push({
-              id: game.id,
-              name: game.name,
-              background_image: game.background_image
-            });
+            selected.push({ id: game.id, name: game.name });
             renderSelectedGames();
             updateHiddenInput();
             searchResults.innerHTML = '';
@@ -200,14 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fields = registerStep1.querySelectorAll('input[required]');
     return Array.from(fields).every((field) => field.reportValidity());
   }
-
-  function advanceToStepTwo() {
-    if (!validateStepOne()) {
-      return;
-    }
-
-    showStep(2);
-  }
+  
 
   avatarInput.addEventListener('change', () => {
     const file = avatarInput.files[0];
@@ -241,22 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   showStep(1);
 
-  registerStep1.addEventListener('keydown', (event) => {
-    if (event.key !== 'Enter') {
+  nextStepBtn.addEventListener('click', () => {
+    if (!validateStepOne()) {
       return;
     }
 
-    const target = event.target;
-
-    if (!(target instanceof HTMLInputElement) || target.type === 'file') {
-      return;
-    }
-
-    event.preventDefault();
-    advanceToStepTwo();
+    showStep(2);
   });
 
-  nextStepBtn.addEventListener('click', advanceToStepTwo);
 
   backStepBtn.addEventListener('click', () => {
     showStep(1);
