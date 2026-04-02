@@ -240,4 +240,24 @@ document.addEventListener('DOMContentLoaded', () => {
   backStepBtn.addEventListener('click', () => {
     showStep(1);
   });
+
+  
+  // Prevent form submission on Enter in step 1 inputs and go to next step
+  const step1Inputs = registerStep1.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
+  step1Inputs.forEach(input => {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        nextStepBtn.click();
+      }
+    });
+  });
+
+  var input = document.getElementById("playstyle");
+    input.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("myBtn").click();
+      }
+    });
 });
