@@ -129,26 +129,16 @@
 
 
       <div class="dashboard-games">
-   <label for="gameSearch">Favorite games</label>
-   <% if (user.favoriteGames && user.favoriteGames.length > 0) { %>
-    <ul>
-      <% user.favoriteGames.forEach(game => { %>
-        <li><%= game.name, game.background_image %></li>
-      <% }) %>
-    </ul>
-   <% } else { %>
-    <p>No favorite games added yet.</p>
-   <% } %>
-        <div id="gameSearchField">
-            <input type="text" id="gameSearch" placeholder="Search for games..." autocomplete="off" />
-            <div id="searchResults"></div>
+        <div id="registerStep2" data-step="2">
+          <label for="gameSearch">Favorite games</label>
+          <div id="gameSearchField">
+              <input type="text" id="gameSearch" placeholder="Search for games..." autocomplete="off" />
+              <div id="searchResults"></div>
+          </div>
+
+          <div id="selectedGames"></div>
+          <input type="hidden" name="favoriteGames" id="favoriteGamesInput" value='<%- JSON.stringify(user.favoriteGames || []) %>' />
         </div>
-
-        <div id="selectedGames"></div>
-        <input type="hidden" name="favoriteGames" id="favoriteGamesInput" />
-
-      </div>
-    
 
     <p class="dashboard-text">
       This page is ready for the next team step, like profiles, matches or chat.

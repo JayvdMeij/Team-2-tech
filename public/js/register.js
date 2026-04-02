@@ -23,100 +23,114 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectedLanguages = document.getElementById('selectedLanguages');
   const selectedPlaystyles = document.getElementById('selectedPlaystyles');
 
-  if (!registerForm || !registerCard || !registerStep1 || !registerStep2 || !avatarInput || !gameSearch) {
-    return;
-  }
-
   let selected = [];
   let debounceTimer;
 
-  registerStep2.style.display = 'none';
-  avatarPreviewWrap.style.display = 'none';
-  searchResults.style.display = 'none';
-  selectedGames.style.display = 'none';
-
-  function showStep(stepNumber) {
-    registerStep1.style.display = stepNumber === 1 ? 'flex' : 'none';
-    registerStep2.style.display = stepNumber === 2 ? 'flex' : 'none';
-    registerCard.classList.toggle('is-step-2', stepNumber === 2);
-    registerCard.scrollTop = 0;
-  }
-
-  function validateStepOne() {
-    const fields = registerStep1.querySelectorAll('input[required]');
-    return Array.from(fields).every((field) => field.reportValidity());
-  }
-
-  function updateHiddenInput() {
-    favoriteGamesInput.value = JSON.stringify(selected);
-  }
-
-  function renderSelectedGames() {
-    selectedGames.innerHTML = '';
-
-    if (selected.length === 0) {
-      selectedGames.style.display = 'none';
+  function initializeGameSearch() {
+    if (!gameSearch || !searchResults || !selectedGames || !favoriteGamesInput) {
       return;
     }
 
-    selectedGames.style.display = 'flex';
+    try {
+      selected = favoriteGamesInput.value ? JSON.parse(favoriteGamesInput.value) : [];
+      if (!Array.isArray(selected)) {
+        selected = [];
+      }
+    } catch {
+      selected = [];
+    }
 
-    selected.forEach((game, index) => {
-      const tag = document.createElement('div');
-      tag.innerHTML = `
-        <span>${game.name}</span>
-        <button type="button" data-index="${index}">x</button>
-      `;
-      selectedGames.appendChild(tag);
-    });
+    searchResults.style.display = 'none';
 
-    selectedGames.querySelectorAll('button').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const index = Number(btn.dataset.index);
-        selected.splice(index, 1);
-        renderSelectedGames();
-        updateHiddenInput();
+    function updateHiddenInput() {
+      favoriteGamesInput.value = JSON.stringify(selected);
+    }
+
+    function renderSelectedGames() {
+      selectedGames.innerHTML = '';
+
+      if (selected.length === 0) {
+        selectedGames.style.display = 'none';
+        return;
+      }
+
+      selectedGames.style.display = 'flex';
+
+      selected.forEach((game, index) => {
+        const tag = document.createElement('div');
+        tag.innerHTML = `
+          <span>${game.name}</span>
+          <button type="button" data-index="${index}">x</button>
+        `;
+        selectedGames.appendChild(tag);
       });
-    });
-  }
 
-  async function searchGames(query) {
-    const response = await fetch(`/api/games-search?q=${encodeURIComponent(query)}`);
-    const games = await response.json();
-
-    searchResults.innerHTML = '';
-
-    if (!Array.isArray(games) || games.length === 0) {
-      searchResults.style.display = 'none';
-      return;
-    }
-
-    searchResults.style.display = 'flex';
-
-    games.forEach((game) => {
-      const alreadyAdded = selected.some((g) => g.id === game.id);
-      const item = document.createElement('button');
-      item.type = 'button';
-      item.disabled = alreadyAdded;
-      item.innerHTML = `
-        <div>
-          ${game.background_image ? `<img src="${game.background_image}" alt="${game.name}">` : ''}
-          <div><strong>${game.name}</strong></div>
-        </div>
-      `;
-
-      item.addEventListener('click', () => {
-        if (!selected.some((g) => g.id === game.id)) {
-          selected.push({ id: game.id, name: game.name });
+      selectedGames.querySelectorAll('button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const index = Number(btn.dataset.index);
+          selected.splice(index, 1);
           renderSelectedGames();
           updateHiddenInput();
-          searchResults.innerHTML = '';
-          searchResults.style.display = 'none';
-          gameSearch.value = '';
-        }
+        });
       });
+    }
 
-      searchResults.appendChild(item);
+    async function searchGames(query) {
+      const response = await fetch(`/api/games-search?q=${encodeURIComponent(query)}`);
+      const games = await response.json();
+
+      searchResults.innerHTML = '';
+
+      if (!Array.isArray(games) || games.length === 0) {
+        searchResults.style.display = 'none';
+        return;
+      }
+
+      searchResults.style.display = 'flex';
+
+      games.forEach((game) => {
+        const alreadyAdded = selected.some((g) => g.id === game.id);
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.disabled = alreadyAdded;
+        item.innerHTML = `
+          <div>
+            ${game.background_image ? `<img src="${game.background_image}" alt="${game.name}">` : ''}
+            <div><strong>${game.name}</strong></div>
+          </div>
+        `;
+
+        item.addEventListener('click', () => {
+          if (!selected.some((g) => g.id === game.id)) {
+            selected.push({ id: game.id, name: game.name });
+            renderSelectedGames();
+            updateHiddenInput();
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'none';
+            gameSearch.value = '';
+          }
+        });
+
+        searchResults.appendChild(item);
+      });
+    }
+
+    renderSelectedGames();
+    updateHiddenInput();
+
+    gameSearch.addEventListener('input', () => {
+      const query = gameSearch.value.trim();
+      clearTimeout(debounceTimer);
+
+      if (query.length < 2) {
+        searchResults.style.display = 'none';
+        searchResults.innerHTML = '';
+        return;
+      }
+
+      debounceTimer = setTimeout(() => {
+        searchGames(query);
+      }, 300);
     });
   }
 
@@ -162,6 +176,27 @@ document.addEventListener('DOMContentLoaded', () => {
   setupTagSelect(languageSelect, selectedLanguages, 'language[]');
   setupTagSelect(playstyleSelect, selectedPlaystyles, 'playstyle[]');
 
+  initializeGameSearch();
+
+  if (!registerForm || !registerCard || !registerStep1 || !registerStep2 || !avatarInput || !avatarLabel || !avatarPreviewWrap || !avatarPreview || !removeAvatarBtn || !fileUploadDiv || !nextStepBtn || !backStepBtn) {
+    return;
+  }
+
+  registerStep2.style.display = 'none';
+  avatarPreviewWrap.style.display = 'none';
+
+  function showStep(stepNumber) {
+    registerStep1.style.display = stepNumber === 1 ? 'flex' : 'none';
+    registerStep2.style.display = stepNumber === 2 ? 'flex' : 'none';
+    registerCard.classList.toggle('is-step-2', stepNumber === 2);
+    registerCard.scrollTop = 0;
+  }
+
+  function validateStepOne() {
+    const fields = registerStep1.querySelectorAll('input[required]');
+    return Array.from(fields).every((field) => field.reportValidity());
+  }
+
   avatarInput.addEventListener('change', () => {
     const file = avatarInput.files[0];
 
@@ -204,20 +239,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   backStepBtn.addEventListener('click', () => {
     showStep(1);
-  });
-
-  gameSearch.addEventListener('input', () => {
-    const query = gameSearch.value.trim();
-    clearTimeout(debounceTimer);
-
-    if (query.length < 2) {
-      searchResults.style.display = 'none';
-      searchResults.innerHTML = '';
-      return;
-    }
-
-    debounceTimer = setTimeout(() => {
-      searchGames(query);
-    }, 300);
   });
 });
