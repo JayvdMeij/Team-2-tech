@@ -43,14 +43,24 @@ router.post('/dashboard/edit', requireLogin, upload.fields([ { name: 'avatar', m
     try {
       const db = await connectDB();
       const usersCollection = db.collection('users');
-      const { username, bio, tags } = req.body;
+      const { username, bio, favoriteGames } = req.body;
+
+      let parsedFavoriteGames = [];
+      if (favoriteGames) {
+        try {
+          parsedFavoriteGames = JSON.parse(favoriteGames);
+        } catch {
+          parsedFavoriteGames = [];
+        }
+      }
 
       const updateData = {
         username: username.trim(),
         bio: bio.trim(),
         platform: Array.isArray(req.body.platform) ? req.body.platform : [],
         language: Array.isArray(req.body.language) ? req.body.language : [],
-        playstyle: Array.isArray(req.body.playstyle) ? req.body.playstyle : []
+        playstyle: Array.isArray(req.body.playstyle) ? req.body.playstyle : [],
+        favoriteGames: parsedFavoriteGames
 
       };
 

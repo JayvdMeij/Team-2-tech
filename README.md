@@ -33,5 +33,38 @@ De **Matching Website** helpt de gebruiker om andere gamers te vinden met vergel
 1. Clone deze repo
 2. Ga naar project folder:
 3. Run command: npm install
-4. Maak een .env bestand aan en zet daarin je MongoDB login
-5. Zet in het .env bestand de API key
+4. Maak een .env bestand aan en plak hierin het volgende:
+PORT=
+MONGO_URI=
+DB_NAME=
+appName=
+SESSION_SECRET=
+RAWG_API_KEY=
+4. Zet achter port bijvoorbeeld "3000"
+5. Plak achter MONGO_URI jou link van je MondoDB cluster, deze ziet eruit als volgt:
+mongodb+srv://<db_username>:<db_password>@clusternaaam.abcdefg.mongodb.net/
+6. Plak achter DB_NAME de naam van je cluster
+7. Zet achter SESSION_SECRET een willekeurige en geheime tekenreeks
+8. Zet achter RAWG_API_KEY jou rawg api key deze kun je hier aanvragen:
+https://rawg.io/apidocs
+
+tijdelijk:
+   <label for="gameSearch">Favorite games</label>
+   <% if (user.favoriteGames && user.favoriteGames.length > 0) { %>
+    <ul>
+      <% user.favoriteGames.forEach(game => { %>
+        <li><%= game.name, game.background_image %></li>
+      <% }) %>
+    </ul>
+   <% } else { %>
+    <p>No favorite games added yet.</p>
+   <% } %>
+        <div id="gameSearchField">
+            <input type="text" id="gameSearch" placeholder="Search for games..." autocomplete="off" />
+            <div id="searchResults"></div>
+        </div>
+
+        <div id="selectedGames"></div>
+        <input type="hidden" name="favoriteGames" id="favoriteGamesInput" />
+
+      </div>
