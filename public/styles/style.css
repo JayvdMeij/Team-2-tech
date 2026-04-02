@@ -560,7 +560,8 @@ footer {
 #registerForm #gameSearch,
 #registerForm select,
 #loginForm input[type="text"],
-#loginForm input[type="password"] {
+#loginForm input[type="password"],
+.auth-card input[type="email"] {
   width: 100%;
   padding: 0.875rem 0.9375rem;
   border-radius: 0.625rem;
