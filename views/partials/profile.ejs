@@ -3,13 +3,50 @@
 <div class="profile-page">
   <div class="profile-card">
 
+    <% if (profileUser.thumbnail) { %>
+      <img src="/uploads/<%= profileUser.thumbnail %>" alt="Thumbnail" class="profile-thumbnail" />
+    <% } else { %>
+      <img src="/images/default-thumbnail.png" alt="Default Thumbnail" class="profile-thumbnail placeholder-thumbnail" />
+    <% } %>
     <% if (profileUser.avatar) { %>
       <img src="/uploads/<%= profileUser.avatar %>" alt="Avatar" class="profile-avatar" />
     <% } else { %>
-      <div class="profile-avatar-placeholder">👤</div>
+      <img src="/images/default-avatar.png" alt="Default Avatar" class="profile-avatar placeholder-avatar" />
     <% } %>
 
     <h1><%= profileUser.username %></h1>
+    <p><%= profileUser.status || 'Offline' %></p>
+       <div class="dashboard-bio">
+<label>bio</label>
+<p><%= profileUser.bio || 'No Bio' %></p>
+</div>
+
+    <div class="dashboard-tags">
+<label>Tags</label>
+<div class="tag-list">
+  <% if (profileUser.language && profileUser.language.length > 0) { %>
+    <% profileUser.language.forEach(language => { %>
+      <div class="tag-pill">
+        <span><%= language %></span>
+      </div>
+    <% }) %>
+  <% } %>
+  <% if (profileUser.playstyle && profileUser.playstyle.length > 0) { %>
+    <% profileUser.playstyle.forEach(playstyle => { %>
+      <div class="tag-pill">
+        <span><%= playstyle %></span>
+      </div>
+    <% }) %>
+  <% } %>
+  <% if (profileUser.platform && profileUser.platform.length > 0) { %>
+    <% profileUser.platform.forEach(platform => { %>
+      <div class="tag-pill">
+        <span><%= platform %></span>
+      </div>
+    <% }) %>
+  <% } %>
+</div>
+</div>
 
     <% if (profileUser.favoriteGames && profileUser.favoriteGames.length > 0) { %>
       <h3>Favoriete games</h3>

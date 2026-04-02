@@ -77,26 +77,7 @@ playstyleOptions.addEventListener("click", (e) => {
   e.target.remove(); // remove from options   
 });
 
-// CUSTOM TAGS
-const customTagInput = document.getElementById("custom-tag-input");
-const customTagBtn = document.getElementById("add-custom-tag-btn");
-const customTagList = document.getElementById("custom-tag-list");
 
-customTagBtn.addEventListener("click", () => {
-  const value = customTagInput.value.trim();
-  if (!value) return;
-
-  const row = document.createElement("div");
-  row.classList.add("tag-pill");
-  row.innerHTML = `
-    <span>${value}</span>
-    <input type="hidden" name="customTag[]" value="${value}">
-    <button type="button" class="remove-tag">✖</button>
-  `;
-
-  customTagList.appendChild(row);
-  customTagInput.value = ""; // clear input
-});
 
 // REMOVE TAGS
 document.addEventListener("click", (e) => {
@@ -126,7 +107,7 @@ document.addEventListener("click", (e) => {
     option.textContent = value;
     document.getElementById("playstyle-options").appendChild(option);
   }
-  else if (type === "customTag[]") {}
+  
 
   row.remove(); // remove from list
 });

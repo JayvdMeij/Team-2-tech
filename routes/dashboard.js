@@ -50,8 +50,7 @@ router.post('/dashboard/edit', requireLogin, upload.fields([ { name: 'avatar', m
         bio: bio.trim(),
         platform: Array.isArray(req.body.platform) ? req.body.platform : [],
         language: Array.isArray(req.body.language) ? req.body.language : [],
-        playstyle: Array.isArray(req.body.playstyle) ? req.body.playstyle : [],
-        customTag: Array.isArray(req.body.customTag) ? req.body.customTag : []
+        playstyle: Array.isArray(req.body.playstyle) ? req.body.playstyle : []
 
       };
 
