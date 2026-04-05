@@ -1,33 +1,34 @@
 const express = require('express');
-const { requireLogin } = require('./middleware'); 
+const { requireLogin } = require('./middleware');
 const connectDB = require('../mongoDB');
-const { ObjectId } = require('mongodb'); 
 
 const router = express.Router();
 
-// MATCHING
-// De matching logica laat zien of de gebruiker minstens 1 overeenkomst heeft met een andere gebruiker.
+// Zorgt ervoor dat een value altijd als array behandeld wordt
+
+
+// Checkt of 2 arrays minstens 1 overlap hebben
+function hasOverlap(arr1 = [], arr2 = []) {
+  return arr1.some(item => arr2.includes(item));
+}
 
 function isMatch(currentUser, candidateUser) {
-  const currentGames = currentUser.favoriteGames || [];
-  const candidateGames = candidateUser.favoriteGames || [];
+  const currentGames = toArray(currentUser.favoriteGames);
+  const candidateGames = toArray(candidateUser.favoriteGames);
 
-  const hasSameGame = candidateGames.some(game => currentGames.includes(game));
+  const currentPlatforms = toArray(currentUser.platform);
+  const candidatePlatforms = toArray(candidateUser.platform);
 
-  const hasSamePlatform =
-    currentUser.platform &&
-    candidateUser.platform &&
-    currentUser.platform === candidateUser.platform;
+  const currentPlaystyles = toArray(currentUser.playstyle);
+  const candidatePlaystyles = toArray(candidateUser.playstyle);
 
-  const hasSamePlaystyle =
-    currentUser.playstyle &&
-    candidateUser.playstyle &&
-    currentUser.playstyle === candidateUser.playstyle;
+  const currentLanguages = toArray(currentUser.language);
+  const candidateLanguages = toArray(candidateUser.language);
 
-  const hasSameLanguage =
-    currentUser.language &&
-    candidateUser.language &&
-    currentUser.language === candidateUser.language;
+  const hasSameGame = hasOverlap(currentGames, candidateGames);
+  const hasSamePlatform = hasOverlap(currentPlatforms, candidatePlatforms);
+  const hasSamePlaystyle = hasOverlap(currentPlaystyles, candidatePlaystyles);
+  const hasSameLanguage = hasOverlap(currentLanguages, candidateLanguages);
 
   return hasSameGame || hasSamePlatform || hasSamePlaystyle || hasSameLanguage;
 }
@@ -45,40 +46,70 @@ router.get('/matches', requireLogin, async (req, res) => {
     const currentUser = req.session.user;
     const currentUserId = currentUser.id.toString();
 
-    // Filter out the current user
-    const filteredUsers = users.filter(user => user._id.toString() !== currentUserId);
+    const filteredUsers = users.filter(
+      user => user._id.toString() !== currentUserId
+    );
 
     const matches = getMatches(currentUser, filteredUsers);
 
-    // For each match, determine the friendship status so the playerCard
-    // knows which button to show: 'add', 'pending', or 'friends'
     const matchesWithStatus = matches.map(match => {
-      const matchIdStr = match._id.toString();
-
-      // Check if already friends (current user is in match's friends array)
-      const isFriends = (match.friends || []).some(
-        (id) => id.toString() === currentUserId
+      const isFriends = toArray(match.friends).some(
+        id => id.toString() === currentUserId
       );
 
-      // Check if request already sent (current user is in match's friendRequests)
-      const isPending = (match.friendRequests || []).some(
-        (r) => r.from.toString() === currentUserId && r.status === 'pending'
+      const isPending = toArray(match.friendRequests).some(
+        request =>
+          request &&
+          request.from &&
+          request.from.toString() === currentUserId &&
+          request.status === 'pending'
       );
 
       let friendStatus = 'add';
-      if (isFriends) friendStatus = 'friends';
-      else if (isPending) friendStatus = 'pending';
+      if (isFriends) {
+        friendStatus = 'friends';
+      } else if (isPending) {
+        friendStatus = 'pending';
+      }
 
       return { ...match, friendStatus };
     });
 
+    const platformOptions = [
+      ...new Set(
+        matchesWithStatus.flatMap(user => toArray(user.platform)).filter(Boolean)
+      )
+    ];
+
+    const languageOptions = [
+      ...new Set(
+        matchesWithStatus.flatMap(user => toArray(user.language)).filter(Boolean)
+      )
+    ];
+
+    const playstyleOptions = [
+      ...new Set(
+        matchesWithStatus.flatMap(user => toArray(user.playstyle)).filter(Boolean)
+      )
+    ];
+
     res.render('pages/matches', {
-      matches: matchesWithStatus
+      matches: matchesWithStatus,
+      filters: {
+        platform: platformOptions,
+        language: languageOptions,
+        playstyle: playstyleOptions
+      }
     });
   } catch (error) {
     console.error('Matching error:', error);
     res.status(500).render('pages/matches', {
       matches: [],
+      filters: {
+        platform: [],
+        language: [],
+        playstyle: []
+      },
       error: 'Something went wrong while fetching matches. Please try again later.'
     });
   }

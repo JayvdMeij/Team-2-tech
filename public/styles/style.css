@@ -1735,9 +1735,52 @@ footer {
                         /* MATCHING */
 /****************************************************************/
 
-.matches {
+.matches-layout {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
   background-color: var(--color-bg);
   padding: 2rem;
+
+    aside {
+      width: 20rem;
+      margin-right: 2rem;
+
+      form {
+
+        padding: 2rem;
+
+        background-color: #000;
+        border-radius: .2rem;
+
+        display: flex;
+        flex-flow: column;
+        gap: 4rem;
+      }
+
+      /* multi selection options */
+
+      section {
+        display: flex;
+        flex-flow: column;
+        gap: 1rem;
+
+        h2 {
+          font-size: 1rem;
+          margin-bottom: .4rem;
+
+          text-decoration: underline;
+          text-decoration-thickness: .1rem;
+          text-underline-offset: .7rem;
+          text-decoration-color: #424242;
+        }
+      }
+    }
+}
+
+.matches {
+    width: 80%;
 
   ul {
     display: grid;
@@ -1809,7 +1852,16 @@ footer {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-  }}
+  }
+
+  input {
+    color: #fff;
+  }
+
+  placeholder {
+    color: rgba(255,255,255,0.8);
+  }
+}
 
 /* Player Card Content Match */
 
@@ -1834,6 +1886,10 @@ footer {
     background-color: #0040ff;
 
     width: fit-content;
+  }
+
+  button:hover {
+    background-color: #0039e5;
   }
 
   /* Profile picture */
@@ -1884,14 +1940,14 @@ footer {
 
     div:first-of-type {
       width: 100%;
-      height: 15rem;
+      height: 10rem;
       background: rgb(135, 135, 135);
       overflow: hidden;
 
       position: absolute;
       z-index: 0;
       
-      top: -100;
+      top: 0;
       left: 0;
 
       border: none;
