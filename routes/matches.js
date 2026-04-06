@@ -5,12 +5,18 @@ const connectDB = require('../mongoDB');
 const router = express.Router();
 
 // Zorgt ervoor dat een value altijd als array behandeld wordt
-
+function toArray(value) {
+  if (!value) return [];
+  return Array.isArray(value) ? value : [value];
+}
 
 // Checkt of 2 arrays minstens 1 overlap hebben
 function hasOverlap(arr1 = [], arr2 = []) {
   return arr1.some(item => arr2.includes(item));
 }
+
+// MATCHING
+// De matching logica laat zien of de gebruiker minstens 1 overeenkomst heeft met een andere gebruiker.
 
 function isMatch(currentUser, candidateUser) {
   const currentGames = toArray(currentUser.favoriteGames);
@@ -46,12 +52,15 @@ router.get('/matches', requireLogin, async (req, res) => {
     const currentUser = req.session.user;
     const currentUserId = currentUser.id.toString();
 
+    // Filter out the current user
     const filteredUsers = users.filter(
       user => user._id.toString() !== currentUserId
     );
 
     const matches = getMatches(currentUser, filteredUsers);
 
+    // For each match, determine the friendship status so the playerCard
+    // knows which button to show: 'add', 'pending', or 'friends'
     const matchesWithStatus = matches.map(match => {
       const isFriends = toArray(match.friends).some(
         id => id.toString() === currentUserId
@@ -65,6 +74,7 @@ router.get('/matches', requireLogin, async (req, res) => {
           request.status === 'pending'
       );
 
+      // Check if already friends (current user is in match's friends array)
       let friendStatus = 'add';
       if (isFriends) {
         friendStatus = 'friends';
@@ -75,6 +85,7 @@ router.get('/matches', requireLogin, async (req, res) => {
       return { ...match, friendStatus };
     });
 
+     // Check if request already sent (current user is in match's friendRequests)
     const platformOptions = [
       ...new Set(
         matchesWithStatus.flatMap(user => toArray(user.platform)).filter(Boolean)

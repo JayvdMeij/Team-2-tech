@@ -1,13 +1,56 @@
 <%- include('../partials/header') %>
 
-<h1>About</h1>
+<div class="about">
+  <section>
+    <h1>About Us</h1>
+    <img src="/images/about-hero-section.png" alt="">
+  </section>
 
-<button id="aboutBtn">Toon extra info</button>
+  <!-- Team Member Sections -->
 
-<div id="extraInfo">
-  <p>Dit is extra content 🎉</p>
+  <!-- jay -->
+  <section>
+    <div>
+      <h3>Jay</h3>
+      <p><strong>Role:</strong> Frontend / Backend Developer</p>
+    </div>
+    <p>Responsible for the backend structure of the application. He set up the database logic and managed how user data is stored and retrieved. He also developed the friend request system, including the inbox and friend list functionality.</p>
+    <p>"Amazing teammate to work with! Always reliable and helpful."</p>
+    <img src="/images/cat-jay-about.png" alt="cat jay">
+  </section>
+
+  <!-- tess -->
+  <section>
+    <div>
+      <h3>Tess</h3>
+      <p><strong>Role:</strong> Frontend / Backend Developer</p>
+    </div>
+    <p>Worked on both the frontend and backend of the platform. She built the login, registration, and password recovery functionality and handled storing user data in the MongoDB database. She also developed the user preferences system, allowing users to personalize their profile.</p>
+    <p>"Driven teammate to work with! Always dedicated."</p>
+    <img src="/images/cat-tess-about.png" alt="cat tess">
+  </section>
+
+  <!-- charlotte -->
+  <section>
+    <div>
+      <h3>Charlotte</h3>
+      <p><strong>Role:</strong> Frontend / Backend Developer & Planner</p>
+    </div>
+    <p>Developed the matching system, including retrieving data from the database, displaying matches and filtering it. She also managed the frontend structure (styling) and was responsible for the planning on GitHub and Trello, as well as contributing to the concept and design of the product.</p>
+    <p>"Great to work with! Took responsibility of both development and planning, and kept everything structured and on track."</p>
+    <img src="/images/cat-charlotte-about.png" alt="cat charlotte">
+  </section>
+
+  <!-- daniel -->
+  <section>
+    <div>
+      <h3>Daniel</h3>
+      <p><strong>Role:</strong> Frontend / Backend Developer</p>
+    </div>
+    <p>Worked on both the frontend and backend of the platform. He developed the profile dashboard where users can update their preferences, profile image, and thumbnail, and save these changes to the MongoDB database. He also built the profile view, allowing users to see how their profile looks to others.</p>
+    <p>"Teammate that is great to work with! Always dedicated and knowledgeable."</p>
+    <img src="/images/cat-daniel-about.png" alt="cat daniel">
+  </section>
 </div>
-
-<script src="../js/about.js"></script>
 
 <%- include('../partials/footer') %>
