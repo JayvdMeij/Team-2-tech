@@ -150,7 +150,7 @@ router.post('/login', async (req, res) => {
     };
 
     req.session.success = 'Login successful!';
-    res.redirect('/dashboard');
+    res.redirect('/matches');
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).render('pages/login', {

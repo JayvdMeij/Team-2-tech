@@ -1,29 +1,57 @@
 <%- include("../partials/header") %>
 
-<div class="matches" id="matches">
-    <div>
-        <input class="search" type="text" placeholder="Zoek gebruiker">
+<div class="matches-layout">
 
-        <select id="filter">
-            <option value="all">Filteren</option>
-            <option value="pc">PC</option>
-            <option value="console">Console</option>
-            <option value="casual">Casual</option>
-            <option value="competitive">Competitive</option>
-            <option value="english">English</option>
-            <option value="dutch">Dutch</option>
-        </select>
+    <aside id="filter">
+        <form>
+            <section>
+                <h2>Platform</h2>
+                <% filters.platform.forEach(platform => { %>
+                    <label>
+                        <input type="checkbox" name="platform" value="<%= String(platform).toLowerCase() %>">
+                        <%= platform %>
+                    </label>
+                <% }) %>
+            </section>
 
-        <button class="sort" data-sort="name">Sort (A-Z)</button>
+            <section>
+                <h2>Language</h2>
+                <% filters.language.forEach(language => { %>
+                    <label>
+                        <input type="checkbox" name="language" value="<%= String(language).toLowerCase() %>">
+                        <%= language %>
+                    </label>
+                <% }) %>
+            </section>
+
+            <section> <h2>Playstyle</h2> 
+                <label><input type="checkbox" name="playstyle" value="casual"> Casual</label> 
+                <label><input type="checkbox" name="playstyle" value="competitive"> Competitive</label> 
+            </section>
+        </form>
+    </aside>
+
+    <div class="matches" id="matches">
+        <div>
+            <input class="search" type="text" placeholder="Zoeken..." />
+
+            <select id="sortSelect">
+                <option value="name-asc">Sort (A-Z)</option>
+                <option value="name-desc">Sort (Z-A)</option>
+            </select>
+        </div>
+
+        <% if (matches && matches.length > 0) { %>
+            <ul class="list players">
+                <% matches.forEach(player => { %>
+                    <%- include('../partials/playerCard', { player }) %>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>No matches found.</p>
+        <% } %>
     </div>
 
-    <% if (matches && matches.length > 0) { %>
-        <ul class="list players">
-            <% matches.forEach(player => { %>
-                <%- include('../partials/playerCard', { player }) %>
-            <% }) %>
-        </ul>
-    <% } else { %> <p>No matches found.</p> <% } %>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>

@@ -5,36 +5,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const usersList = new List('matches', options);
 
-    // filter functie
     const filter = document.getElementById('filter');
-    filter.addEventListener('change', () => {
-        const value = filter.value.toLowerCase();
+    const sortSelect = document.getElementById('sortSelect');
+    const checkboxes = filter.querySelectorAll('input[type="checkbox"]');
 
-        // alle gebruikers laten zien bij 'filteren' moet nog veranderd worden (styling)
-        if (value === 'all') {
-            usersList.filter();
-            return;
+    function getCheckedValues(name) {
+        return Array.from(filter.querySelectorAll(`input[name="${name}"]:checked`))
+            .map(input => input.value.toLowerCase());
+    }
+
+    // Apply filters based on selected checkboxes
+
+    function applyFilters() {
+        const selectedPlatforms = getCheckedValues('platform');
+        const selectedLanguages = getCheckedValues('language');
+        const selectedPlaystyles = getCheckedValues('playstyle');
+
+        usersList.filter(item => {
+            const values = item.values();
+
+            const platform = (values.platform || '').toLowerCase();
+            const language = (values.language || '').toLowerCase();
+            const playstyle = (values.playstyle || '').toLowerCase();
+
+            const matchPlatform =
+                selectedPlatforms.length === 0 ||
+                selectedPlatforms.some(value => platform.includes(value));
+
+            const matchLanguage =
+                selectedLanguages.length === 0 ||
+                selectedLanguages.some(value => language.includes(value));
+
+            const matchPlaystyle =
+                selectedPlaystyles.length === 0 ||
+                selectedPlaystyles.some(value => playstyle.includes(value));
+
+            return matchPlatform && matchLanguage && matchPlaystyle;
+        });
+    }
+
+    // Apply sorting based on selected option
+
+    function applySort() {
+        const selectedSort = sortSelect.value;
+
+        if (selectedSort === 'name-asc') {
+            usersList.sort('name', { order: 'asc' });
         }
 
-        // filters
-        usersList.filter(item => {
-            const platform = (item.values().platform || '').toLowerCase();
-            const playstyle = (item.values().playstyle || '').toLowerCase();
-            const language = (item.values().language || '').toLowerCase();
+        if (selectedSort === 'name-desc') {
+            usersList.sort('name', { order: 'desc' });
+        }
+    }
 
-            return (
-                platform.includes(value) ||
-                playstyle.includes(value) ||
-                language.includes(value)
-            );
-        });
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', applyFilters);
     });
 
-    // sorteren
-    const sortButton = document.querySelector('.sort');
-    sortButton.addEventListener('click', () => {
-        usersList.sort('name', { order: 'asc' });
-    });
+    sortSelect.addEventListener('change', applySort);
 
     usersList.sort('name', { order: 'asc' });
 });
