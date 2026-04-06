@@ -31,11 +31,8 @@ if (typeof currentUserId !== 'undefined' && currentUserId) {
   });
 }
 
-// ─────────────────────────────────────────
 //  Badge helpers — updates ALL .inbox-badge elements
 //  (sidebar badge + header badge update together)
-// ─────────────────────────────────────────
-
 function fetchPendingCount() {
   fetch('/api/friend-requests/pending-count')
     .then((res) => res.json())
@@ -56,10 +53,7 @@ function updateBadge(change) {
   setBadge(Math.max(0, current + change));
 }
 
-// ─────────────────────────────────────────
 //  Popup: incoming friend request (your existing style)
-// ─────────────────────────────────────────
-
 function showFriendRequestPopup({ fromUsername, fromId, fromAvatar }) {
   const existing = document.getElementById('fr-popup');
   if (existing) existing.remove();
@@ -70,12 +64,12 @@ function showFriendRequestPopup({ fromUsername, fromId, fromAvatar }) {
     <div class="fr-popup-content">
       ${fromAvatar
         ? `<img src="/uploads/${fromAvatar}" class="fr-popup-avatar" />`
-        : `<div class="fr-popup-avatar-placeholder">👤</div>`
+        : `<div class="fr-popup-avatar-placeholder"></div>`
       }
       <div class="fr-popup-text">
-        <strong>${fromUsername}</strong> heeft je een vriendschapsverzoek gestuurd!
+        <strong>${fromUsername}</strong> has sent you a friend request!
       </div>
-      <a href="/inbox" class="fr-popup-link">Bekijk inbox</a>
+      <a href="/inbox" class="fr-popup-link">View Inbox</a>
       <button class="fr-popup-close" onclick="document.getElementById('fr-popup').remove()">✕</button>
     </div>
   `;
@@ -84,10 +78,7 @@ function showFriendRequestPopup({ fromUsername, fromId, fromAvatar }) {
   autoDismiss('fr-popup');
 }
 
-// ─────────────────────────────────────────
 //  Popup: friend request accepted
-// ─────────────────────────────────────────
-
 function showAcceptedPopup({ byUsername }) {
   const existing = document.getElementById('fa-popup');
   if (existing) existing.remove();
@@ -97,7 +88,7 @@ function showAcceptedPopup({ byUsername }) {
   popup.innerHTML = `
     <div class="fr-popup-content">
       <div class="fr-popup-text">
-        <strong>${byUsername}</strong> heeft je vriendschapsverzoek geaccepteerd!
+        <strong>${byUsername}</strong> has accepted your friend request!
       </div>
       <button class="fr-popup-close" onclick="document.getElementById('fa-popup').remove()">✕</button>
     </div>
@@ -106,11 +97,7 @@ function showAcceptedPopup({ byUsername }) {
   document.body.appendChild(popup);
   autoDismiss('fa-popup');
 }
-
-// ─────────────────────────────────────────
 //  Popup: pending requests on login
-// ─────────────────────────────────────────
-
 function showPendingCountPopup(count) {
   const existing = document.getElementById('pending-popup');
   if (existing) existing.remove();
@@ -120,9 +107,9 @@ function showPendingCountPopup(count) {
   popup.innerHTML = `
     <div class="fr-popup-content">
       <div class="fr-popup-text">
-        Je hebt <strong>${count}</strong> openstaand${count === 1 ? '' : 'e'} vriendschapsverzoek${count === 1 ? '' : 'en'}!
+        You have <strong>${count}</strong> pending friend request${count === 1 ? '' : 's'}!
       </div>
-      <a href="/inbox" class="fr-popup-link">Bekijk inbox</a>
+      <a href="/inbox" class="fr-popup-link">View Inbox</a>
       <button class="fr-popup-close" onclick="document.getElementById('pending-popup').remove()">✕</button>
     </div>
   `;
@@ -131,11 +118,8 @@ function showPendingCountPopup(count) {
   autoDismiss('pending-popup');
 }
 
-// ─────────────────────────────────────────
 //  Auto-dismiss helper
-// ─────────────────────────────────────────
-
-function autoDismiss(id, delay = 6000) {
+function autoDismiss(id, delay = 60000) {
   setTimeout(() => {
     const el = document.getElementById(id);
     if (el) {
