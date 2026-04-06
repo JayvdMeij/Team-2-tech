@@ -1463,14 +1463,22 @@ footer {
 .edit-avatar:hover .hover-overlay {
   opacity: 1;
 }
-
-.edit-avatar{
-   width: 8.125rem;
+.edit-avatar .hover-overlay {
+ width: 8.125rem;
   height: 8.125rem;
   object-fit: cover;
   border-radius: 50%;
   margin: 1.125rem auto;
-  border: 0.1875rem solid rgba(255,255,255,0.15);
+  bottom:-4rem;
+}
+
+.edit-avatar{
+    width: 8.125rem;
+  height: 8.125rem;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 1.125rem auto;
+  bottom:-4rem;
   left: -35%
 }
 
