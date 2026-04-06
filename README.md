@@ -47,24 +47,3 @@ mongodb+srv://<db_username>:<db_password>@clusternaaam.abcdefg.mongodb.net/
 7. Zet achter SESSION_SECRET een willekeurige en geheime tekenreeks
 8. Zet achter RAWG_API_KEY jou rawg api key deze kun je hier aanvragen:
 https://rawg.io/apidocs
-
-tijdelijk:
-   <label for="gameSearch">Favorite games</label>
-   <% if (user.favoriteGames && user.favoriteGames.length > 0) { %>
-    <ul>
-      <% user.favoriteGames.forEach(game => { %>
-        <li><%= game.name, game.background_image %></li>
-      <% }) %>
-    </ul>
-   <% } else { %>
-    <p>No favorite games added yet.</p>
-   <% } %>
-        <div id="gameSearchField">
-            <input type="text" id="gameSearch" placeholder="Search for games..." autocomplete="off" />
-            <div id="searchResults"></div>
-        </div>
-
-        <div id="selectedGames"></div>
-        <input type="hidden" name="favoriteGames" id="favoriteGamesInput" />
-
-      </div>
