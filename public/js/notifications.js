@@ -119,7 +119,7 @@ function showPendingCountPopup(count) {
 }
 
 //  Auto-dismiss helper
-function autoDismiss(id, delay = 6000) {
+function autoDismiss(id, delay = 60000) {
   setTimeout(() => {
     const el = document.getElementById(id);
     if (el) {
