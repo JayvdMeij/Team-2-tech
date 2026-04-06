@@ -5,9 +5,8 @@ const { requireLogin } = require('./middleware');
 
 const router = express.Router();
 
-// ──────────────────────────────────────────────
-//  INBOX — shows all pending friend requests
-// ──────────────────────────────────────────────
+
+//  INBOX - shows all pending friend requests
 router.get('/inbox', requireLogin, async (req, res) => {
   try {
     const db = await connectDB();
@@ -31,9 +30,8 @@ router.get('/inbox', requireLogin, async (req, res) => {
   }
 });
 
-// ──────────────────────────────────────────────
-//  ACCEPT a friend request
-// ──────────────────────────────────────────────
+
+//  Accept a friend request
 router.post('/api/friend-request/:fromId/accept', requireLogin, async (req, res) => {
   try {
     const db = await connectDB();
@@ -42,7 +40,7 @@ router.post('/api/friend-request/:fromId/accept', requireLogin, async (req, res)
     const currentUserId = req.session.user.id.toString();
     const fromId = req.params.fromId;
 
-    // 1) Update the request status to 'accepted'
+    // 1. Update the request status to 'accepted'
     await usersCollection.updateOne(
       {
         _id: new ObjectId(currentUserId),
@@ -54,7 +52,7 @@ router.post('/api/friend-request/:fromId/accept', requireLogin, async (req, res)
       }
     );
 
-    // 2) Add each user to the other's friends array (no duplicates)
+    // 2. Add each user to the other's friends array (no duplicates)
     await usersCollection.updateOne(
       { _id: new ObjectId(currentUserId) },
       { $addToSet: { friends: new ObjectId(fromId) } }
@@ -65,7 +63,7 @@ router.post('/api/friend-request/:fromId/accept', requireLogin, async (req, res)
       { $addToSet: { friends: new ObjectId(currentUserId) } }
     );
 
-    // 3) Notify the sender in real-time
+    // 3. Notify the sender in real-time
     const io = req.app.get('io');
     io.to(fromId).emit('friend-accepted', {
       byUsername: req.session.user.username,
@@ -80,9 +78,8 @@ router.post('/api/friend-request/:fromId/accept', requireLogin, async (req, res)
   }
 });
 
-// ──────────────────────────────────────────────
+
 //  DECLINE a friend request
-// ──────────────────────────────────────────────
 router.post('/api/friend-request/:fromId/decline', requireLogin, async (req, res) => {
   try {
     const db = await connectDB();
@@ -108,9 +105,8 @@ router.post('/api/friend-request/:fromId/decline', requireLogin, async (req, res
   }
 });
 
-// ──────────────────────────────────────────────
+
 //  API — pending request count (for badge)
-// ──────────────────────────────────────────────
 router.get('/api/friend-requests/pending-count', requireLogin, async (req, res) => {
   try {
     const db = await connectDB();
@@ -128,9 +124,7 @@ router.get('/api/friend-requests/pending-count', requireLogin, async (req, res) 
   }
 });
 
-// ──────────────────────────────────────────────
 //  View another user's public profile
-// ──────────────────────────────────────────────
 router.get('/user/:id', requireLogin, async (req, res) => {
   try {
     const db = await connectDB();
@@ -166,10 +160,8 @@ router.get('/user/:id', requireLogin, async (req, res) => {
     res.status(500).send('Something went wrong.');
   }
 });
-
-// ──────────────────────────────────────────────
 //  Send a friend request
-// ──────────────────────────────────────────────
+
 router.post('/api/friend-request/:id', requireLogin, async (req, res) => {
   try {
     const db = await connectDB();
@@ -223,9 +215,8 @@ router.post('/api/friend-request/:id', requireLogin, async (req, res) => {
   }
 });
 
-// ──────────────────────────────────────────────
+
 //  List all users (dev/debug)
-// ──────────────────────────────────────────────
 router.get('/users', requireLogin, async (req, res) => {
   const db = await connectDB();
   const users = await db.collection('users').find().toArray();
