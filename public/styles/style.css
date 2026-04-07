@@ -78,19 +78,29 @@ header {
 
   nav {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     align-items: center;
     align-self: center;
 
     gap: 1rem;
 
+    .logo {
+      width: 4%;
+    }
+
+    nav > a {
+      background: transparent;
+    }
+
     div {
       display: flex;
       justify-content: end;
       flex-flow: row;
+
+      gap: 1rem;
     }
 
-    a, button {
+    div > a, button {
       width: fit-content;
       padding: .5em 1.5rem;
       border-radius: .2rem;
@@ -105,18 +115,18 @@ header {
       color: black;
     }
 
-    a:hover {
+    div > a:hover {
       background: #8EAAFF;
       color: #111;
     }
     
-    button:hover {
+    div > button:hover {
       background: #8EAAFF;
       color: #010f38;
     }
   }
 
-  a:last-of-type {
+  div > a:last-of-type {
     background-color: #484848;
   }
 }
@@ -153,7 +163,7 @@ a > span {
 .inbox-icon{
   width: 1.25rem;
   height: 1.25rem;
-  fill: #fff;
+  /* fill: #fff; */
 }
 
 .request-card{
@@ -418,7 +428,42 @@ footer {
       gap: 2rem;
       padding: 8rem 2rem;
       
-      
+      .step-by-step li {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .step-by-step li img {
+        position: absolute;
+        width: 70%;
+        left: 100px;
+        bottom: 0;
+
+        opacity: 0.4;
+      }
+
+      .step-by-step li:nth-of-type(2) img {
+        position: absolute;
+        width: 100%;
+        left: 40px;
+        bottom: -120px;
+
+        opacity: 0.4;
+        rotate: 12deg;
+
+        filter: brightness(2); 
+      }
+
+      .step-by-step li:nth-of-type(3) img {
+        position: absolute;
+        width: 100%;
+        left: 40px;
+        bottom: -70px;
+
+        opacity: 0.4;
+        rotate: 45deg;
+      }
+
       ul {
         grid-template-columns: repeat(3, 1fr);
         padding: 0;
@@ -947,9 +992,9 @@ footer {
 /****************************************************************/
 
 @media (max-width: 48rem) {
-  .logo {
+  /* .logo {
     font-size: 1.05rem;
-  }
+  } */
 
   .nav-btn {
     padding: 0.5625rem 0.75rem;
