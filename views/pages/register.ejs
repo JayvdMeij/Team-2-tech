@@ -1,8 +1,11 @@
 <%- include('../partials/header', { title: 'Register - GameMatch', bodyClass: 'auth-shell' }) %>
 
+<!-- Hoofdsectie voor de registratie pagina met game wall achtergrond -->
 <section class="auth-page">
+  <!-- Placeholder voor overlay of extra elementen -->
   <div></div>
 
+  <!-- Container voor de game wall rijen (achtergrondafbeeldingen van games) -->
   <div>
     <div></div>
     <div></div>
@@ -12,21 +15,26 @@
     <div></div>
   </div>
 
+  <!-- Container voor het registratie formulier -->
   <div>
     <div class="auth-card" id="registerCard">
       <h2>Create Account</h2>
       <p>Set up your profile and start matching.</p>
 
+      <!-- Toon foutmelding als er een error is -->
       <% if (error) { %>
         <div id="authError"><%= error %></div>
       <% } %>
 
+      <!-- Toon succesmelding als er een success is -->
       <% if (success) { %>
         <div id="authSuccess"><%= success %></div>
       <% } %>
 
+      <!-- Inclusie van het registratie formulier partial -->
       <%- include('../partials/reg-form') %>
       
+      <!-- Link naar login pagina -->
       <p>
         Already have an account?
         <a href="/login">Log In</a>
@@ -35,6 +43,7 @@
   </div>
 </section>
 
+<!-- Scripts voor game wall en registratie functionaliteit -->
 <script src="/js/game-wall.js"></script>
 <script src="/js/register.js"></script>
 <%- include('../partials/footer') %>
