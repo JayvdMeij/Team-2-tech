@@ -39,20 +39,23 @@ function isMatch(currentUser, candidateUser) {
   return hasSameGame || hasSamePlatform || hasSamePlaystyle || hasSameLanguage;
 }
 
+// Haalt alle gebruikers op die een match zijn met de huidige gebruiker
 function getMatches(currentUser, users) {
   return users.filter(user => isMatch(currentUser, user));
 }
 
+// MATCHES ROUTE
 router.get('/matches', requireLogin, async (req, res) => {
   try {
     const db = await connectDB();
     const usersCollection = db.collection('users');
 
+    // Haal alle gebruikers op uit de database
     const users = await usersCollection.find().toArray();
     const currentUser = req.session.user;
     const currentUserId = currentUser.id.toString();
 
-    // Filter out the current user
+    // Filtert de the current user uit de matching
     const filteredUsers = users.filter(
       user => user._id.toString() !== currentUserId
     );

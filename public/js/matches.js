@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const sortSelect = document.getElementById('sortSelect');
     const checkboxes = filter.querySelectorAll('input[type="checkbox"]');
 
+    // Haalt alle aangevinkte opties op van een filter
     function getCheckedValues(name) {
         return Array.from(filter.querySelectorAll(`input[name="${name}"]:checked`))
             .map(input => input.value.toLowerCase());
     }
-
-    // Apply filters based on selected checkboxes
-
+    
+    
     function applyFilters() {
         const selectedPlatforms = getCheckedValues('platform');
         const selectedLanguages = getCheckedValues('language');
@@ -40,12 +40,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 selectedPlaystyles.length === 0 ||
                 selectedPlaystyles.some(value => playstyle.includes(value));
 
+            // Alleen tonen als alle filters matchen
             return matchPlatform && matchLanguage && matchPlaystyle;
         });
     }
 
-    // Apply sorting based on selected option
-
+    // Sorteert de lijst op basis van de geselecteerde optie
     function applySort() {
         const selectedSort = sortSelect.value;
 
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     sortSelect.addEventListener('change', applySort);
 
+    // Standaard sorteren op naam A-Z
     usersList.sort('name', { order: 'asc' });
 });
 
