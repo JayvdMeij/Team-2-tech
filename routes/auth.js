@@ -5,18 +5,22 @@ const { upload } = require('./middleware');
 
 const router = express.Router();
 
+// Route voor het tonen van de login pagina
 router.get('/login', (req, res) => {
   res.render('pages/login', { error: null });
 });
 
+// Route voor het tonen van de registratie pagina
 router.get('/register', (req, res) => {
   res.render('pages/register', { error: null });
 });
 
+// Oude route voor registratie, nu doorgestuurd naar /register
 router.get('/registratie', (req, res) => {
   res.redirect('/register');
 });
 
+// POST route voor gebruikersregistratie
 router.post('/register', upload.single('avatar'), async (req, res) => {
   try {
     const db = await connectDB();
@@ -24,6 +28,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
 
     const { username, email, password, favoriteGames, platform, language, playstyle } = req.body;
 
+    // Controleer of alle vereiste velden zijn ingevuld
     if (!username || !email || !password || !platform || !language || !playstyle) {
       return res.status(400).render('pages/register', {
         error: 'Username, email, password, platform, language and playstyle are required.'
@@ -33,6 +38,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
     const normalizedEmail = email.toLowerCase().trim();
     const normalizedUsername = username.trim();
 
+    // Controleer of de gebruiker al bestaat op basis van email of username
     const existingUser = await usersCollection.findOne({
       $or: [
         { email: normalizedEmail },
@@ -57,8 +63,10 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
       }
     }
 
+    // Hash het wachtwoord voor beveiliging
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Maak een nieuw gebruikersobject aan
     const newUser = {
       username: normalizedUsername,
       email: normalizedEmail,
@@ -71,12 +79,14 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
       createdAt: new Date()
     };
 
+    // Voeg de nieuwe gebruiker toe aan de database
     await usersCollection.insertOne(newUser);
 
     const { autoLogin } = req.body;
 
+    // Als autoLogin is aangevinkt, log de gebruiker direct in
     if (autoLogin) {
-      // Automatically log the user in after successful registration
+      // Stel de sessie in voor de nieuwe gebruiker
       req.session.user = {
         id: newUser._id,
         username: newUser.username,
@@ -102,12 +112,14 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
   }
 });
 
+// POST route voor gebruikerslogin
 router.post('/login', async (req, res) => {
   try {
     const db = await connectDB();
     const usersCollection = db.collection('users');
     const { login, password } = req.body;
 
+    // Controleer of login en wachtwoord zijn ingevuld
     if (!login || !password) {
       return res.status(400).render('pages/login', {
         error: 'Username/email and password are required.'
@@ -117,6 +129,7 @@ router.post('/login', async (req, res) => {
     const loginInput = login.trim();
     const normalizedLogin = loginInput.toLowerCase();
 
+    // Zoek de gebruiker op basis van email of username
     const user = await usersCollection.findOne({
       $or: [
         { email: normalizedLogin },
@@ -130,6 +143,7 @@ router.post('/login', async (req, res) => {
       });
     }
 
+    // Vergelijk het ingevoerde wachtwoord met het gehashte wachtwoord
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
@@ -138,6 +152,7 @@ router.post('/login', async (req, res) => {
       });
     }
 
+    // Stel de sessie in voor de ingelogde gebruiker
     req.session.user = {
       id: user._id,
       username: user.username,
@@ -159,6 +174,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// POST route voor uitloggen
 router.post('/logout', (req, res) => {
   req.session.destroy(() => {
     res.redirect('/');

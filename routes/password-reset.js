@@ -5,6 +5,7 @@ const connectDB = require('../mongoDB');
 
 const router = express.Router();
 
+// GET route voor het tonen van de "wachtwoord vergeten" pagina
 router.get('/forgot-password', (req, res) => {
   res.render('pages/forgot-password', {
     error: null,
@@ -13,12 +14,14 @@ router.get('/forgot-password', (req, res) => {
   });
 });
 
+// POST route voor het aanvragen van een wachtwoord reset link
 router.post('/forgot-password', async (req, res) => {
   try {
     const db = await connectDB();
     const usersCollection = db.collection('users');
     const email = (req.body.email || '').toLowerCase().trim();
 
+    // Controleer of email is ingevuld
     if (!email) {
       return res.status(400).render('pages/forgot-password', {
         error: 'Email is required.',
@@ -27,8 +30,10 @@ router.post('/forgot-password', async (req, res) => {
       });
     }
 
+    // Zoek de gebruiker op basis van email
     const user = await usersCollection.findOne({ email });
 
+    // Als gebruiker niet bestaat, geef een algemene boodschap (voor beveiliging)
     if (!user) {
       return res.render('pages/forgot-password', {
         error: null,
@@ -37,9 +42,12 @@ router.post('/forgot-password', async (req, res) => {
       });
     }
 
+    // Genereer een unieke reset token
     const resetToken = crypto.randomBytes(32).toString('hex');
+    // Stel de vervaldatum in op 30 minuten vanaf nu
     const resetTokenExpiresAt = new Date(Date.now() + 1000 * 60 * 30);
 
+    // Update de gebruiker met de reset token en vervaldatum
     await usersCollection.updateOne(
       { _id: user._id },
       {
@@ -50,6 +58,7 @@ router.post('/forgot-password', async (req, res) => {
       }
     );
 
+    // Toon de reset link aan de gebruiker
     res.render('pages/forgot-password', {
       error: null,
       success: 'Use the reset link below to choose a new password.',
@@ -65,17 +74,20 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 
+// GET route voor het tonen van de wachtwoord reset pagina met token
 router.get('/reset-password/:token', async (req, res) => {
   try {
     const db = await connectDB();
     const usersCollection = db.collection('users');
     const { token } = req.params;
 
+    // Controleer of de token geldig is en niet verlopen
     const user = await usersCollection.findOne({
       resetToken: token,
       resetTokenExpiresAt: { $gt: new Date() }
     });
 
+    // Als token ongeldig of verlopen, toon foutmelding
     if (!user) {
       return res.status(400).render('pages/reset-password', {
         error: 'This reset link is invalid or has expired.',
@@ -85,6 +97,7 @@ router.get('/reset-password/:token', async (req, res) => {
       });
     }
 
+    // Toon de reset pagina met geldige token
     res.render('pages/reset-password', {
       error: null,
       success: null,
@@ -102,6 +115,7 @@ router.get('/reset-password/:token', async (req, res) => {
   }
 });
 
+// POST route voor het daadwerkelijk resetten van het wachtwoord
 router.post('/reset-password/:token', async (req, res) => {
   try {
     const db = await connectDB();
@@ -109,6 +123,7 @@ router.post('/reset-password/:token', async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
 
+    // Controleer of wachtwoord is ingevuld
     if (!password) {
       return res.status(400).render('pages/reset-password', {
         error: 'Password is required.',
@@ -118,11 +133,13 @@ router.post('/reset-password/:token', async (req, res) => {
       });
     }
 
+    // Controleer opnieuw of de token geldig is
     const user = await usersCollection.findOne({
       resetToken: token,
       resetTokenExpiresAt: { $gt: new Date() }
     });
 
+    // Als token ongeldig, toon foutmelding
     if (!user) {
       return res.status(400).render('pages/reset-password', {
         error: 'This reset link is invalid or has expired.',
@@ -132,8 +149,10 @@ router.post('/reset-password/:token', async (req, res) => {
       });
     }
 
+    // Hash het nieuwe wachtwoord
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Update het wachtwoord en verwijder de reset token
     await usersCollection.updateOne(
       { _id: user._id },
       {
@@ -145,6 +164,7 @@ router.post('/reset-password/:token', async (req, res) => {
       }
     );
 
+    // Toon succesmelding
     res.render('pages/reset-password', {
       error: null,
       success: 'Your password has been updated. You can now log in.',
