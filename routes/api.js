@@ -33,7 +33,7 @@ router.get('/api/background-games', async (req, res) => {
       return res.json([]);
     }
 
-    const url = `https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}&page_size=40&ordering=-rating`;
+    const url = 'https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}&ordering=-added&page_size=40';
     const response = await fetch(url);
     const data = await response.json();
 
