@@ -1745,7 +1745,9 @@ footer {
 }
 
 .fr-popup-content {
-
+  position: absolute;
+  top: 6rem;
+  right: 2rem;
 
   display: flex;
   align-items: center;
