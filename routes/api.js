@@ -42,7 +42,7 @@ router.get('/api/background-games', async (req, res) => {
     }
 
     // Bouw de URL voor het ophalen van populaire games met achtergrondafbeeldingen
-    const url = 'https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}&ordering=-added&page_size=40';
+    const url = `https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}&ordering=-added&page_size=40`;
     const response = await fetch(url);
     const data = await response.json();
 

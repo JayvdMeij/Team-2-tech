@@ -84,7 +84,7 @@ router.post('/register', upload.single('avatar'), async (req, res) => {
 
     const { autoLogin } = req.body;
 
-    // Als autoLogin is aangevinkt, log de gebruiker direct in
+    // Als autoLogin is aangevinkt, logt de gebruiker direct in
     if (autoLogin) {
       // Stel de sessie in voor de nieuwe gebruiker
       req.session.user = {
