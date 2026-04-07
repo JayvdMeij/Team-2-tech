@@ -13,26 +13,32 @@
 <body>
   <header>
     <nav>
-      <% if (currentUser) { %>
-        <a href="/">Home</a>
-        <a href="/matches">Matches</a>
-        <a href="/dashboard">Dashboard</a>
 
-        <a href="/inbox" class="nav-inbox-link">
-          <img src="/images/mail.png" alt="Inbox" class="inbox-icon">
-          
-          <span class="inbox-badge">0</span>
-        </a>
+      <a href="/" class="logo">
+        <img src="/images/Logo-website-rideordie.png" alt="Logo">
+      </a>
 
-        <form action="/logout" method="POST">
-          <button type="submit">Log out</button>
-        </form>
-        <% } else { %>
-          <a href="/">Home</a>
+      <div>
+        <% if (currentUser) { %>
+          <a href="/matches">Matches</a>
           <a href="/about">About</a>
-          <a href="/login">Log in</a>
-          <% } %>
+          <a href="/dashboard">Dashboard</a>
+
+          <a href="/inbox" class="nav-inbox-link">
+            <img src="/images/mail.png" alt="Inbox" class="inbox-icon">
+            
+            <span class="inbox-badge">0</span>
+          </a>
+
+          <form action="/logout" method="POST">
+            <button type="submit">Log out</button>
+          </form>
+          <% } else { %>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/login">Log in</a>
+            <% } %>
+        </div>
     </nav>
-    </div>
   </header>
   <main>
