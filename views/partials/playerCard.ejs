@@ -36,10 +36,33 @@
         <p class="bio"><%= player.bio || 'No bio available' %></p>
     </div>
 
+    <!-- platform, playstyle, language apart gerenderd in p -->
+
     <div>
-        <p class="platform"><%= player.platform || 'No platform' %></p>
-        <p class="playstyle"><%= player.playstyle || 'No playstyle' %></p>
-        <p class="language"><%= player.language || 'No language' %></p>
+        <% if (player.platform) { %>
+        <% (Array.isArray(player.platform) ? player.platform : player.platform.split(',')).forEach(item => { %>
+        <p class="platform"><%= item.trim() %></p>
+        <% }) %>
+    <% } else { %>
+        <p class="platform">No platform</p>
+    <% } %>
+
+    <% if (player.playstyle) { %>
+        <% (Array.isArray(player.playstyle) ? player.playstyle : player.playstyle.split(',')).forEach(item => { %>
+        <p class="playstyle"><%= item.trim() %></p>
+        <% }) %>
+    <% } else { %>
+        <p class="playstyle">No playstyle</p>
+    <% } %>
+
+    <% if (player.language) { %>
+        <% (Array.isArray(player.language) ? player.language : player.language.split(',')).forEach(item => { %>
+        <p class="language"><%= item.trim() %></p>
+        <% }) %>
+    <% } else { %>
+        <p class="language">No language</p>
+    <% } %>
+
     </div>
 
     <!-- favorite games -->
